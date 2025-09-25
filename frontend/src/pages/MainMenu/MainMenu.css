@@ -1,0 +1,41 @@
+
+.main-menu {
+    display: flex;
+    height: 100%;
+}
+
+.main-menu > section {
+    flex: 1;
+}
+
+/* QR CODE */
+
+.qrcode-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+/* Main Content */
+
+.main-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.main-section .game-name {
+    text-align: center;
+    padding: 3rem 0;
+}
+
+/* Leaderboard */
+
+
+@media (max-width: 768px) {
+    .qrcode-section, .leaderboard-section {
+        display: none;
+    }
+}

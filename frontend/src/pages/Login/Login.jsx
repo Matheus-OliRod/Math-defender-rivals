@@ -1,13 +1,14 @@
 import { useRef } from "react";
 import "./Login.css";
 import logo from "@res/images/ethereal-logo-no-bg.png";
-export default function Login() {
+export default function Login( { setLogged }) {
 
     const nameRef = useRef(null);
     const emailRef = useRef(null);
 
     const handleLogin = () => {
-
+        setLogged(true);
+        console.trace("TODO: Add credentials verification before backend");
     };
 
     return (
