@@ -1,0 +1,26 @@
+
+.how-to-play {
+    height: 100%;
+    color: white;
+    text-wrap: wrap;
+    padding: 1rem;
+    overflow: auto;
+}
+
+.how-to-play h1 {
+    font-family: monospace;
+}
+
+.how-to-play p {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-bottom: 2rem;
+}
+
+
+/* Adjusting for Desktop view*/
+@media (min-width: 768px) {
+    .how-to-play {
+        width: 60%;
+        margin: auto;
+    }
+}

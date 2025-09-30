@@ -1,0 +1,12 @@
+
+.back-to-menu-arrow {
+    display: block;
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+}
+
+.arrow {
+    color: white;
+    width: 2rem;
+}

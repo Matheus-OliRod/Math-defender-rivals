@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { Link } from "react-router-dom";
 import "./Login.css";
 import logo from "@res/images/ethereal-logo-no-bg.png";
 export default function Login( { setLogged }) {
@@ -7,7 +8,7 @@ export default function Login( { setLogged }) {
     const emailRef = useRef(null);
 
     const handleLogin = () => {
-        setLogged(true);
+
         console.trace("TODO: Add credentials verification before backend");
     };
 
@@ -26,7 +27,7 @@ export default function Login( { setLogged }) {
                 <div className="login-input-holder">
                     <input ref={emailRef} type="email" name="email" placeholder="Email" />
                     <input ref={nameRef} type="text" name="name" placeholder="Nome" />
-                    <button onClick={handleLogin}>Entrar</button>
+                    <Link to="/main-menu"><button onClick={handleLogin}>Entrar</button></Link>
                 </div>
             </div>
 

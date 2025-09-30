@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&family=Michroma&family=SUSE+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+.leaderboard {
+    width: 100%;
+    overflow-y: auto;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20%;
+    box-sizing: border-box;
+    text-align: center;
+    font-family: goldman;
+}
+
+.leaderboard h1 {
+    color: gold;
+}
+
+.leaderboard h2 {
+    color: silver;
+}
+
+.leaderboard h3 {
+    color: brown;
+}
+
+.leaderboard p {
+    color: gray;
+}
+
+.trophy-icon {
+    width: 2rem;
+}
