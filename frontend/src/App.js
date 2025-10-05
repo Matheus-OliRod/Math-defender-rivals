@@ -22,8 +22,6 @@ const router = createBrowserRouter([
 
 function App() {
 
-  const [logged, setLogged] = useState(true);
-
   return (
     <div className="App container">
       <RouterProvider router={router} />

@@ -1,0 +1,54 @@
+
+.config {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    gap: 5rem;
+    width: 40%;
+    height: 100%;
+    color: white;
+    font-weight: 600;
+}
+
+.setting-group input[type="checkbox"], .setting-group input[type="range"] {
+    accent-color: var(--buttons-primary);
+}
+
+.user-settings {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-settings button {
+    border: 1px solid black;
+    padding: 1rem;
+    box-shadow: none;
+}
+
+.logout-button {
+    background-color: gray;
+    width: 100%;
+}
+
+.logout-button:hover {
+    background-color: rgb(85, 85, 85);
+}
+
+.delete-account-button {
+    background-color: var(--danger);
+}
+
+.delete-account-button:hover {
+    background-color: darkred;
+}
+
+@media (max-width: 768px) {
+    .config {
+        width: 90%;
+    }
+}
