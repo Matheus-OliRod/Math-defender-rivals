@@ -1,0 +1,17 @@
+
+.compedium {
+    width: 70%;
+    margin: 5rem auto;
+
+    color: white;
+}
+
+.link-holder {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.link-holder a {
+    color: blueviolet;
+}
