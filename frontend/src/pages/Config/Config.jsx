@@ -3,6 +3,7 @@ import BackToMenu from "../../components/back-to-menu/BackToMenu";
 import "./Config.css";
 export default function Config() {
 
+    // To be set as context
     const [hasMusic, setHasMusic] = useState(true);
     const [volume, setVolume] = useState(10);
     const [hasSfx, setHasSfx] = useState(true);

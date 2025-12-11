@@ -4,6 +4,7 @@ import "./MainMenu.css";
 
 export default function MainMenu() {
 
+    // To be changed into User context
     const [playerBestScore] = useState(10000);
     const [playerRank] = useState(1);
     const [rivalRank] = useState(2);

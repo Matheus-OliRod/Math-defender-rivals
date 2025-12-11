@@ -1,14 +1,13 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Login.css";
 import logo from "@res/images/ethereal-logo-no-bg.png";
 export default function Login( { setLogged }) {
 
-    const nameRef = useRef(null);
-    const emailRef = useRef(null);
+    const [userEmail, setUserEmail] = useState("");
+    const [userName, setUserName] = useState("");
 
     const handleLogin = () => {
-
         console.trace("TODO: Add credentials verification before backend");
     };
 
@@ -25,8 +24,15 @@ export default function Login( { setLogged }) {
                 <strong className="game-name">MATH DEFENDER</strong>
 
                 <div className="login-input-holder">
-                    <input ref={emailRef} type="email" name="email" placeholder="Email" />
-                    <input ref={nameRef} type="text" name="name" placeholder="Nome" />
+                    <input type="email" name="email" placeholder="Email"
+                    onChange={(e) => setUserEmail(e.target.value)}
+                    value={userEmail}
+                     />
+
+                    <input type="text" name="name" placeholder="Nome"
+                    onChange={(e) => setUserName(e.target.value)}
+                    value={userName} />
+                    
                     <Link to="/main-menu"><button onClick={handleLogin}>Entrar</button></Link>
                 </div>
             </div>

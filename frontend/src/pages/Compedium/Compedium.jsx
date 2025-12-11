@@ -8,6 +8,8 @@ export default function Compedium() {
 
             <div className="selection-holder">
 
+                {/** To be changed into more user friendly UI with info */}
+
                 <h1>Selecione o link da questão desejada</h1>
                 <p>O link irá abrir uma nova página com conteúdo informativo e educacional sobre a operação.</p>
 

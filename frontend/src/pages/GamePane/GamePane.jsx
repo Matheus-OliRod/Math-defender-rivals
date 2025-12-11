@@ -2,7 +2,7 @@ import { useRef, useState } from "react"
 import "./GamePane.css";
 export default function GamePane() {
 
-    const battlegroundRef = useRef(null);
+    const [enemies, setEnemies] = useState([]); // Will contain question objects
 
     const [currentDifficulty, setCurrentDifficulty] = useState(0);
     const [currentScore, setCurrentScore] = useState(0);
@@ -10,7 +10,9 @@ export default function GamePane() {
 
     return (
         <div className="game-pane">
-            <div ref={battlegroundRef} className="battleground"></div> {/* Where questions will spawn. If reaching the footer limit, the player loses HP */}
+            <div className="battleground">
+                {enemies}    
+            </div> {/* Where questions will spawn. If reaching the footer limit, the player loses HP */}
                 <div className="scores-holder">
                     <h2 className="difficulty-meter">Dificuldade: {currentDifficulty}</h2>
                     <h2 className="score-meter">Pontuação: {currentScore}</h2>
