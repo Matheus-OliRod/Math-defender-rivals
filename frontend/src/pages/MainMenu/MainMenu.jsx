@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import "./MainMenu.css";
+import { UserContext } from "../../contexts/UserContext";
 
 export default function MainMenu() {
 
@@ -9,6 +10,10 @@ export default function MainMenu() {
     const [playerRank] = useState(1);
     const [rivalRank] = useState(2);
     const [leaderboard] = useState([]);
+
+    const userContext = useContext(UserContext);
+
+    console.log(userContext);
 
     return (
         <div className="main-menu">
