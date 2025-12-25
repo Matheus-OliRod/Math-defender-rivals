@@ -5,8 +5,9 @@ export default function Config() {
 
     // To be set as context
     const [hasMusic, setHasMusic] = useState(true);
-    const [volume, setVolume] = useState(10);
+    const [musicVolume, setMusicVolume] = useState(10);
     const [hasSfx, setHasSfx] = useState(true);
+    const [sfxVolume, setSfxVolume] = useState(10);
     const [hasAnimBg, setHasAnimBg] = useState(true);
 
     return (
@@ -17,16 +18,17 @@ export default function Config() {
             <div className="main-settings">
                 <div className="setting-group">
                     <h3>Música de Fundo</h3>
-                    <input type="checkbox" checked={hasMusic} onChange={() => setHasMusic(!hasMusic)} />
-                    <input type="range" disabled={!hasMusic} value={volume} onChange={(e) => setVolume(Number(e.target.value))} />
+                    <input type="checkbox" checked={hasMusic} onChange={(e) => setHasMusic(e.target.checked)} />
+                    <input type="range" disabled={!hasMusic} value={musicVolume} onChange={(e) => setMusicVolume(Number(e.target.value))} />
                 </div>
                 <div className="setting-group">
                     <h3>Efeitos Sonoros</h3>
-                    <input type="checkbox" checked={hasSfx} onChange={() => setHasSfx(!hasSfx)} />
+                    <input type="checkbox" checked={hasSfx} onChange={(e) => setHasSfx(e.target.checked)} />
+                    <input type="range" disabled={!hasSfx} value={sfxVolume} onChange={(e) => setSfxVolume(e.target.value)} />
                 </div>
                 <div className="setting-group">
                     <h3>Animações de Fundo</h3>
-                    <input type="checkbox" checked={hasAnimBg} onChange={() => setHasAnimBg(!hasAnimBg)} />
+                    <input type="checkbox" checked={hasAnimBg} onChange={(e) => setHasAnimBg(e.target.checked)} />
                 </div>
             </div>
 
