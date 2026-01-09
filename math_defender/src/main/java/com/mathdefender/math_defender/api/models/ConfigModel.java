@@ -1,11 +1,25 @@
 package com.mathdefender.math_defender.api.models;
 
-import jakarta.persistence.Id;
+import java.util.UUID;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "config")
 public class ConfigModel {
     
     @Id
-    private String email;
+    @GeneratedValue
+    private UUID player_id;
+
+    @OneToOne
+    @JoinColumn(name = "player_id", unique = true)
+    private UserModel user;
     private int musicVolume;
     private int sfxVolume;
     private boolean hasMusic;
@@ -18,8 +32,8 @@ public class ConfigModel {
 
     // Getters
 
-    public String getEmail() {
-        return email;
+    public UserModel getUser() {
+        return user;
     }
 
     public int getMusicVolume() {
@@ -44,8 +58,8 @@ public class ConfigModel {
 
     // Setters
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUser(UserModel user) {
+        this.user = user;
     }
 
     public void setHasAnimBg(boolean hasAnimBg) {

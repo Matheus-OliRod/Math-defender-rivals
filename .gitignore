@@ -21,3 +21,8 @@
 /frontend/npm-debug.log*
 /frontend/yarn-debug.log*
 /frontend/yarn-error.log*
+
+# For backend files
+
+/math_defender/src/test/*
+/math_defender/src/main/resources/application.properties

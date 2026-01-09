@@ -1,12 +1,20 @@
 package com.mathdefender.math_defender.api.models;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import java.util.UUID;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+
+@Entity
+@Table(name = "players")
 public class UserModel {
 
     @Id
+    @GeneratedValue
+    private UUID id;
     private String email;
     private String name;
     private String rivalName;
@@ -20,6 +28,10 @@ public class UserModel {
     }
 
     // Getters
+
+    public UUID getId() {
+        return id;
+    }
 
     public int getBestScore() {
         return bestScore;
@@ -50,6 +62,10 @@ public class UserModel {
     }
 
     // Setters
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
     public void setBestScore(int bestScore) {
         this.bestScore = bestScore;

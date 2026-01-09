@@ -1,17 +1,28 @@
-import { useRef, useState } from "react"
+import { useState } from "react"
 import "./GamePane.css";
+import QuestionComponent from "../../components/question/QuestionComponent";
 export default function GamePane() {
 
-    const [enemies, setEnemies] = useState([]); // Will contain question objects
+    const [enemies, setEnemies] = useState([10]); // Will contain question objects
+    const [defeated, setDefeated] = useState(0); // Amount of equations solved on current match
 
     const [currentDifficulty, setCurrentDifficulty] = useState(0);
     const [currentScore, setCurrentScore] = useState(0);
     const [rivalBestScore] = useState(0);
 
+    // Game Loop
+    // The question generation and appending cycle.
+
+    // Test START
+
+    const generateQuestion = () => {
+
+    }
+
     return (
         <div className="game-pane">
             <div className="battleground">
-                {enemies}    
+                    
             </div> {/* Where questions will spawn. If reaching the footer limit, the player loses HP */}
                 <div className="scores-holder">
                     <h2 className="difficulty-meter">Dificuldade: {currentDifficulty}</h2>
