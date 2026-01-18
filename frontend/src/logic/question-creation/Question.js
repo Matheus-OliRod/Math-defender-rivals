@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function Question( {difficulty} ) {
+export default function Question(difficulty) {
 
     // Contains all the data to be use on the game logic.
     // Operation consist on the full operation String
@@ -11,20 +11,23 @@ export default function Question( {difficulty} ) {
         operation: "",
         powerup: "normal",
         powerup_value: 0,
-        answer: 0
+        answer: 0,
+        id: crypto.randomUUID(),
+        index: 0
     };
 
     // Question Creation Logic
 
-    appendAddition(question_data, 1);
+    // TEST
+    appendAddition(question_data, difficulty);
+    appendMultiplication(question_data, difficulty);
 
     return question_data;
 }
 
 function appendAddition(question_data, difficulty) {
 
-    const value = Math.top(Math.random()*100*(difficulty+1));
-    console.log("Addition: ",value);
+    const value = Math.ceil(Math.random()*100*(difficulty+1));
 
     if(!question_data.operation) {
         question_data.operation = value + "";
@@ -33,12 +36,12 @@ function appendAddition(question_data, difficulty) {
     }
 
     question_data.operation += " + " + value;
+    question_data.answer = eval(question_data.operation);
 }
 
 function appendSubtraction(question_data, difficulty) {
 
-    const value = Math.top(Math.random()*100*(difficulty+1));
-    console.log("Subtraction: ", value);
+    const value = Math.ceil(Math.random()*100*(difficulty+1));
 
     if(!question_data.operation) {
         question_data.operation = value + "";
@@ -47,10 +50,11 @@ function appendSubtraction(question_data, difficulty) {
     }
 
     question_data.operation += " - " + value;
+    question_data.answer = eval(question_data.operation);
 }
 
 function appendMultiplication(question_data, difficulty) {
-    const value = Math.top(Math.random()*10*(difficulty/2));
+    const value = Math.ceil(Math.random()*10*(difficulty/2));
     console.log("Multiplication: ", value);
 
     if(!question_data.operation) {
@@ -60,34 +64,35 @@ function appendMultiplication(question_data, difficulty) {
     }
 
     question_data.operation += " * " + value;
+    question_data.answer = eval(question_data.operation);
 }
 
 function appendDivision(question_data, difficulty) {
 
 
-    return string;
+    // return string;
 }
 
 function appendExponent(question_data, difficulty) {
 
 
-    return string;
+    // return string;
 }
 
 function appendFactorial(question_data, difficulty) {
 
 
-    return string;
+    // return string;
 }
 
 function appendSqrt(question_data, difficulty) {
 
 
-    return string;
+    // return string;
 }
 
 function appendLog(question_data, difficulty) {
 
 
-    return string;
+    // return string;
 }

@@ -9,12 +9,17 @@
 
 .battleground {
     flex: 1;
+    position: relative;
+    color: white;
 }
 
 .scores-holder {
     display: flex;
     justify-content: space-evenly;
     font-family: "Saira Stencil One";
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 }
 
 .difficulty-meter {
@@ -67,14 +72,4 @@
 
 .game-pane footer .icon-button:active path {
     transform: scale(0.95);
-}
-
-@media (max-width: 768px) {
-    .difficulty-meter {
-        display: none;
-    }
-
-    .rival-best-score {
-        display: none;
-    }
 }
