@@ -38,9 +38,7 @@ export default function GamePane() {
      * Creates a new question and appends to the enemies list
      */
     const generateQuestion = () => {
-        const enemy = Question(currentDifficulty);
-        enemy.index = enemies.length; // TODO: Substitute to use Defeated
-        
+        const enemy = Question(currentDifficulty)
         setEnemies(pE => [...pE, enemy]);
     }
 
@@ -50,11 +48,11 @@ export default function GamePane() {
     const verifyAnswer = () => {
 
         // Verifying if the answer answers anything
-        enemies.forEach(enemy => {
+        for(const enemy of enemies) {
             if(enemy.answer == givenAnswer) {
 
                 setEnemies(pE => (
-                pE.filter(e => e.answer != givenAnswer)
+                pE.filter(e => e.id != enemy.id)
                 ));
         
                 // Updating stats
@@ -62,9 +60,9 @@ export default function GamePane() {
                 setCurrentDifficulty(parseInt(defeated/10));
                 setGivenAnswer("");
 
-                return;
+                break;
             }
-        });
+        }
 
         setGivenAnswer("");
         return;

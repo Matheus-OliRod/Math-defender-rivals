@@ -2,6 +2,8 @@ import { useState } from "react";
 
 export default function Question(difficulty) {
 
+    const index = Math.floor(Math.random()*3);
+
     // Contains all the data to be use on the game logic.
     // Operation consist on the full operation String
     // Powerup is about having special questions to grant a small boost
@@ -14,7 +16,7 @@ export default function Question(difficulty) {
         powerup_value: 0,
         answer: 0,
         id: crypto.randomUUID(),
-        index: 0
+        index: index
     };
 
     // Question Creation Logic
