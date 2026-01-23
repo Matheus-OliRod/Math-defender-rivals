@@ -2,4 +2,11 @@
 .question-block {
     position: absolute;
     width: fit-content;
+    animation-name: fall;
+    animation-duration: 15s;
+}
+
+@keyframes fall {
+    from {top: 0;}
+    to {top: 100%;}
 }
