@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react"
 import "./GamePane.css";
 import QuestionComponent from "../../components/question/QuestionComponent";
-import Question from "../../logic/question-creation/Question";
+import Question from "../../logic/game-loop/Question";
 export default function GamePane() {
 
-    const battleground = useRef(null);
+    const spawnIntervalRef = useRef(null);
 
     const [enemies, setEnemies] = useState([]); // Will contain question objects
     const [defeated, setDefeated] = useState(0); // Amount of equations solved on current match
@@ -12,42 +12,62 @@ export default function GamePane() {
     const [currentDifficulty, setCurrentDifficulty] = useState(0);
     const [currentScore, setCurrentScore] = useState(0);
     const [rivalBestScore] = useState(0);
+    const [isGameOver, setIsGameOver] = useState(false);
 
     const [givenAnswer, setGivenAnswer] = useState("");
 
     // Game Loop
     // The question generation and appending cycle.
 
+    useEffect(() => {
+
+        if(isGameOver) return;
+
+        spawnIntervalRef.current = setInterval(() => {
+            if(enemies.length <= 10) generateQuestion();
+        }, 2000);
+
+        return () => {
+           clearInterval(spawnIntervalRef.current);
+           spawnIntervalRef.current = null;
+        }
+
+    }, [isGameOver]);
+
     /**
      * Creates a new question and appends to the enemies list
      */
     const generateQuestion = () => {
         const enemy = Question(currentDifficulty);
-        enemy.index = defeated; // TODO: Substitute to use Defeated
+        enemy.index = enemies.length; // TODO: Substitute to use Defeated
         
         setEnemies(pE => [...pE, enemy]);
     }
 
     /**
-     * Verifies the answer.
-     * @returns Updated enemies list.
+     * Verifies the answer and updates the enemies list if answer correlates with a question
      */
     const verifyAnswer = () => {
 
         // Verifying if the answer answers anything
-        if(!enemies.find(givenAnswer)) {
-            setGivenAnswer("");
-            return;
-        }
+        enemies.forEach(enemy => {
+            if(enemy.answer == givenAnswer) {
 
-        setEnemies(pE => {
-            return pE.filter(e => e.answer != givenAnswer);
-        });
+                setEnemies(pE => (
+                pE.filter(e => e.answer != givenAnswer)
+                ));
         
-        // Updating stats
-        setDefeated(pD => pD + 1);
-        setCurrentDifficulty(defeated/10);
+                // Updating stats
+                setDefeated(pD => pD + 1);
+                setCurrentDifficulty(parseInt(defeated/10));
+                setGivenAnswer("");
+
+                return;
+            }
+        });
+
         setGivenAnswer("");
+        return;
     }
 
     /**
@@ -55,12 +75,12 @@ export default function GamePane() {
      * @param {Event} keyPressed 
      */
     const enterSend = (keyPressed) => {
-        if(keyPressed === "Enter") verifyAnswer();
+        if(keyPressed == "Enter") verifyAnswer();
     }
 
     return (
         <div className="game-pane">
-            <div ref={battleground} className="battleground">
+            <div className="battleground">
                 <button onClick={generateQuestion}>CRIAR</button>
 
                 {/* Where questions will spawn. If reaching the footer limit, the player loses HP */}

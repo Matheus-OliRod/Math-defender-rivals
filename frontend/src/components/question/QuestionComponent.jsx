@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Question from "../../logic/question-creation/Question";
+import Question from "../../logic/game-loop/Question";
 import "./QuestionComponent.css";
 /**
  * 

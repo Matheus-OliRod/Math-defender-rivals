@@ -7,6 +7,7 @@ export default function Question(difficulty) {
     // Powerup is about having special questions to grant a small boost
     // powerup value is the measure of the benefit given to the player 
     // answer is the expected input from the user
+    // index ranges from 0 to 3, indicating the spawn position
     const question_data = { 
         operation: "",
         powerup: "normal",
@@ -27,7 +28,7 @@ export default function Question(difficulty) {
 
 function appendAddition(question_data, difficulty) {
 
-    const value = Math.ceil(Math.random()*100*(difficulty+1));
+    const value = Math.ceil(Math.random()*10*(difficulty+1));
 
     if(!question_data.operation) {
         question_data.operation = value + "";
@@ -41,7 +42,7 @@ function appendAddition(question_data, difficulty) {
 
 function appendSubtraction(question_data, difficulty) {
 
-    const value = Math.ceil(Math.random()*100*(difficulty+1));
+    const value = Math.ceil(Math.random()*10*(difficulty+1));
 
     if(!question_data.operation) {
         question_data.operation = value + "";
@@ -54,8 +55,7 @@ function appendSubtraction(question_data, difficulty) {
 }
 
 function appendMultiplication(question_data, difficulty) {
-    const value = Math.ceil(Math.random()*10*(difficulty/2));
-    console.log("Multiplication: ", value);
+    const value = Math.ceil(Math.random()*5*(difficulty/2));
 
     if(!question_data.operation) {
         question_data.operation = value + "";
