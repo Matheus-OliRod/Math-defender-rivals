@@ -4,6 +4,7 @@
     width: fit-content;
     animation-name: fall;
     animation-duration: 15s;
+    white-space: nowrap;
 }
 
 @keyframes fall {

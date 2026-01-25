@@ -24,7 +24,13 @@ export default function GamePane() {
         if(isGameOver) return;
 
         spawnIntervalRef.current = setInterval(() => {
-            if(enemies.length <= 10) generateQuestion();
+            setEnemies(pE => {
+                if(pE.length >= 10) {
+                    return pE;
+                }
+
+                return [...pE, createQuestion()];
+            })
         }, 2000);
 
         return () => {
@@ -37,9 +43,9 @@ export default function GamePane() {
     /**
      * Creates a new question and appends to the enemies list
      */
-    const generateQuestion = () => {
+    const createQuestion = () => {
         const enemy = Question(currentDifficulty)
-        setEnemies(pE => [...pE, enemy]);
+        return enemy;
     }
 
     /**
@@ -79,7 +85,7 @@ export default function GamePane() {
     return (
         <div className="game-pane">
             <div className="battleground">
-                <button onClick={generateQuestion}>CRIAR</button>
+                <button onClick={() => {setEnemies(pE => [...pE, createQuestion()])}}>CRIAR</button>
 
                 {/* Where questions will spawn. If reaching the footer limit, the player loses HP */}
 
