@@ -2,14 +2,18 @@
 .config {
     display: flex;
     flex-direction: column;
+    padding: 2rem;
+    color: white;
+    margin: 0 auto;
+}
+
+.settings {
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
     justify-content: center;
     align-items: center;
-    margin: auto;
-    gap: 5rem;
-    width: 40%;
-    height: 100%;
-    color: white;
-    font-weight: 600;
+    margin: 0 auto;
 }
 
 .setting-group input[type="checkbox"], .setting-group input[type="range"] {

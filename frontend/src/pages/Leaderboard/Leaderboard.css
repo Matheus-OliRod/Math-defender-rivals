@@ -1,16 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Goldman:wght@400;700&family=Michroma&family=SUSE+Mono:ital,wght@0,100..800;1,100..800&display=swap');
-.leaderboard {
-    width: 100%;
-    overflow-y: auto;
 
+.leaderboard {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    padding: 2rem;
+}
+
+.rankers {
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    margin-top: 20%;
-    box-sizing: border-box;
-    text-align: center;
-    font-family: goldman;
+    justify-content: center;
 }
 
 .leaderboard h1 {

@@ -1,12 +1,12 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import "./QuestionComponent.css";
 
-export default function QuestionComponent({ question, index }) {
+export default function QuestionComponent({ question, index ,onAnimationEnd }) {
 
   const questionRef = useRef(null);
   const [finalMargin, setFinalMargin] = useState(0);
 
-  const SIDE_PADDING = 30; // px from each side
+  const SIDE_PADDING = 30; // Side margins
 
   // This avoids the question to clip out of the screen
 
@@ -31,6 +31,7 @@ export default function QuestionComponent({ question, index }) {
       ref={questionRef}
       style={{ left: `${finalMargin}px` }}
       className={`question-${question.powerup} question-block`}
+      onAnimationEnd={onAnimationEnd}
     >
       {question.operation}
     </div>
