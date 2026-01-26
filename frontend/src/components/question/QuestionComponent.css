@@ -4,6 +4,8 @@
     width: fit-content;
     animation-name: fall;
     animation-duration: 15s;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
     white-space: nowrap;
 }
 

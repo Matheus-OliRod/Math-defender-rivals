@@ -1,10 +1,13 @@
 
 .how-to-play {
-    height: 100%;
+    min-height: 100%;
+    padding: 2rem;
     color: white;
+}
+
+.guide {
     text-wrap: wrap;
-    padding: 1rem;
-    overflow: auto;
+    padding-bottom: 1rem;
 }
 
 .how-to-play h1 {

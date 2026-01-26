@@ -1,3 +1,8 @@
+
+* {
+  box-sizing: border-box;
+}
+
 #root {
   --backroung-primary: #1D1616;
   --background-secondary: #09122C;
@@ -20,8 +25,7 @@ body, html, #root {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: var(--backroung-primary);
-  overflow: hidden;
+  background-color: #1D1616;
 }
 
 button {
@@ -48,4 +52,10 @@ button:active {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.app-layer {
+  position: relative;
+  height: 100%;
+  z-index: 1;
 }

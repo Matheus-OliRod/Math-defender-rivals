@@ -2,12 +2,14 @@ import { useEffect, useRef, useState } from "react"
 import "./GamePane.css";
 import QuestionComponent from "../../components/question/QuestionComponent";
 import Question from "../../logic/game-loop/Question";
+
 export default function GamePane() {
 
     const spawnIntervalRef = useRef(null);
 
     const [enemies, setEnemies] = useState([]); // Will contain question objects
-    const [defeated, setDefeated] = useState(0); // Amount of equations solved on current match
+    const [defeated, setDefeated] = useState([]); // All equations solved. Will be send to backend to verify and calculate actual score
+    const [playerHealth, setPlayerHealth] = useState(3);
 
     const [currentDifficulty, setCurrentDifficulty] = useState(0);
     const [currentScore, setCurrentScore] = useState(0);
@@ -71,7 +73,27 @@ export default function GamePane() {
         }
 
         setGivenAnswer("");
-        return;
+    }
+
+    const triggerGameOver = () => {
+        setIsGameOver(true);
+        setEnemies([]);
+    }
+
+    const hurtPlayer = (enemy) => {
+        
+        setPlayerHealth(pH => pH-1);
+
+        if(playerHealth <= 0) {
+            triggerGameOver();
+            return;
+        }
+
+        // Removing the question
+
+        setEnemies(pE => 
+            (pE.filter(e => e.id !== enemy.id))
+        );
     }
 
     /**
@@ -85,18 +107,25 @@ export default function GamePane() {
     return (
         <div className="game-pane">
             <div className="battleground">
-                <button onClick={() => {setEnemies(pE => [...pE, createQuestion()])}}>CRIAR</button>
+                <h2 className="health-title">HP = 3 - {3-playerHealth}</h2>
 
                 {/* Where questions will spawn. If reaching the footer limit, the player loses HP */}
 
                 {enemies.map((enemy) => (
                     <QuestionComponent question={enemy}
                     index={enemy.index}
-                    key={enemy.id} />
+                    key={enemy.id}
+                    onAnimationEnd={() => hurtPlayer(enemy)} />
                 ))}
+
+                <div className="game-over">
+                    <h1>GAME OVER</h1>
+                    <button>BACK TO MENU</button>
+                </div>
 
                 <div className="scores-holder">
                     <h2  className="difficulty-meter">Dificuldade: {currentDifficulty}</h2>
+                    <h2 className="score-meter">Pontuação: {currentScore}</h2>
                     <h2 className="rival-best-score">Rival: {rivalBestScore}</h2>
                 </div>
             </div> 

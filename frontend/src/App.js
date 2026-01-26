@@ -5,7 +5,6 @@ import Config from "./pages/Config/Config";
 import Compedium from "./pages/Compedium/Compedium";
 import HowToPlay from "./pages/HowToPlay/HowToPlay";
 import Leaderboard from "./pages/Leaderboard/Leaderboard";
-import { useState } from 'react';
 import './App.css';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
