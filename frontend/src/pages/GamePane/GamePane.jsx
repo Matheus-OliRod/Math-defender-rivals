@@ -83,13 +83,12 @@ export default function GamePane() {
 
     const hurtPlayer = (enemy) => {
         
-        setPlayerHealth(pH => pH-1);
+        setPlayerHealth(pH => {
 
-        // If compared to 0, will wait for 4 hits
-        if(playerHealth < 1) {
-            triggerGameOver();
-            return;
-        }
+            if(playerHealth <= 1) triggerGameOver();
+
+            return pH - 1;
+        });
 
         // Removing the question
 
