@@ -22,6 +22,7 @@
 /frontend/yarn-debug.log*
 /frontend/yarn-error.log*
 
+/.TODO.txt
 # For backend files
 
 /math_defender/src/test/*

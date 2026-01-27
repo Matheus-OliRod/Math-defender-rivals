@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react"
+import {Link} from "react-router-dom";
 import "./GamePane.css";
 import QuestionComponent from "../../components/question/QuestionComponent";
 import Question from "../../logic/game-loop/Question";
@@ -46,7 +47,7 @@ export default function GamePane() {
      * Creates a new question and appends to the enemies list
      */
     const createQuestion = () => {
-        const enemy = Question(currentDifficulty)
+        const enemy = Question(currentDifficulty);
         return enemy;
     }
 
@@ -65,7 +66,7 @@ export default function GamePane() {
         
                 // Updating stats
                 setDefeated(pD => pD + 1);
-                setCurrentDifficulty(parseInt(defeated/10));
+                setCurrentDifficulty(parseInt(defeated.length/10));
                 setGivenAnswer("");
 
                 break;
@@ -84,7 +85,8 @@ export default function GamePane() {
         
         setPlayerHealth(pH => pH-1);
 
-        if(playerHealth <= 0) {
+        // If compared to 0, will wait for 4 hits
+        if(playerHealth < 1) {
             triggerGameOver();
             return;
         }
@@ -118,9 +120,11 @@ export default function GamePane() {
                     onAnimationEnd={() => hurtPlayer(enemy)} />
                 ))}
 
-                <div className="game-over">
-                    <h1>GAME OVER</h1>
-                    <button>BACK TO MENU</button>
+                {/** Game Over panel */}
+                <div style={{display: (isGameOver ? "flex" : "none")}} className="game-over">
+                    <h1>DERROTA</h1>
+                    <h2 className="score-meter">Pontuação: {currentScore}</h2>
+                    <Link to="/main-menu"><button>VOLTAR AO INÍCIO</button></Link>
                 </div>
 
                 <div className="scores-holder">
