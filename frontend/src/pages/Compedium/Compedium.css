@@ -5,6 +5,21 @@
     color: white;
 }
 
+.compedium details {
+    border: solid white 2px;
+    border-radius: .5rem;
+}
+
+.compedium summary {
+    padding: 1rem;
+    cursor: pointer;
+}
+
+.compedium p {
+    padding: 0 1.5rem;
+}
+
+
 .link-holder {
     display: flex;
     flex-direction: column;
