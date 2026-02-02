@@ -169,9 +169,61 @@ export default function Compedium() {
                         </p>
                     </details>
 
-                    
-                    <a rel="noopener noreferrer" target="_blank" href="https://mundoeducacao.uol.com.br/matematica/calculando-raiz-quadrada-um-numero.htm"><li>Raiz quadrada</li></a>
-                    <a rel="noopener noreferrer" target="_blank" href="https://mundoeducacao.uol.com.br/matematica/logaritmos.htm"><li>Logarítmos</li></a>
+                    <details>
+                        <summary>Raiz Quadrada</summary>
+
+                        <p>
+                        A raiz quadrada é a operação inversa da potenciação de expoente 2. Ela é definida apenas para números reais maiores ou iguais a zero, quando se considera o conjunto dos números reais. <br />
+                        Se utiliza o símbolo √, com o número interno sendo o valor que quer se obter a raiz. <br /> <br />
+
+                        As raízes no jogo, entretanto, utilizam apenas números naturais, ou seja, de 0 acima. Na matemática, as raízes podem utilizar de qualquer número real, entretanto para raízes quadradas de números negativos se utilizam outros conceitos e regras.
+
+                        Na prática: <br /> <br />
+
+                        √9 = 3 ou -3, porque 3 * 3 = 9 e -3 * -3 = 9; <br />
+                        √25 = 5 ou -5, porque 5 * 5 = 25 e -5 * -5 = 25; <br />
+                        <br />
+                        <b>No Jogo:</b> <br /> <br />
+
+                        raiz(25) = √25 = 5; <br />
+                        raiz(9) = √9 = 3; <br /> <br />
+
+                        No jogo se utilizam apenas os valores positivos da raiz.
+
+                        <br /> <br />
+
+                        <a rel="noopener noreferrer" target="_blank" href="https://mundoeducacao.uol.com.br/matematica/calculando-raiz-quadrada-um-numero.htm"><li>Raiz quadrada</li></a>
+                        </p>
+                    </details>
+
+                    <details>
+                        <summary>Logarítmo</summary>
+
+                        <p>
+
+                            Enquanto a raiz quadrada busca descobrir qual o número que multiplicado por si mesmo resulta no valor a ser operado, o logarítmo responde quantas vezes este número foi multiplicado por si mesmo. <br />
+                            Para calcular um logarítmo, precisamos de duas coisas, o valor a ser operado e a base, que se trata do número que foi repetido. Quando a base não é informada, é por que a base é 10.
+                            Na prática é: <br /> <br />
+                            log(100) = 2, porque 10² = 100; <br />
+                            log2(8) = 3, porque 2³ = 8; <br />
+                            log3(81) = 4, porque 3⁴ = 81;
+
+                            <br /> <br />
+
+                            Uma maneira de lembrar de como resolver logarítmos é seguir a sequência início, fim e meio: Log BASE (VALOR) = EXPOENTE; Que traduzindo para uma potenciação, ficaria BASE ^ EXPOENTE = VALOR. <br /> <br />
+
+                            <b>No Jogo: </b> <br /> <br />
+
+                            log(100) = 2; <br />
+                            log3(9) = 2; <br />
+                            log7(49) = 2; <br />
+
+                            <br /> <br />
+
+
+                        <a rel="noopener noreferrer" target="_blank" href="https://mundoeducacao.uol.com.br/matematica/logaritmos.htm"><li>Logarítmos</li></a>
+                        </p>
+                    </details>
                 </ul>
 
             </div>
