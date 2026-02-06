@@ -1,14 +1,32 @@
-import { useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import BackToMenu from "../../components/back-to-menu/BackToMenu";
 import "./Config.css";
+import { ConfigContext } from "../../contexts/ConfigContext";
 export default function Config() {
 
-    // To be set as context
-    const [hasMusic, setHasMusic] = useState(true);
-    const [musicVolume, setMusicVolume] = useState(10);
-    const [hasSfx, setHasSfx] = useState(true);
-    const [sfxVolume, setSfxVolume] = useState(10);
-    const [hasAnimBg, setHasAnimBg] = useState(true);
+    const configs = useContext(ConfigContext);
+
+    // To be set on context
+    const [hasMusic, setHasMusic] = useState(configs.config.hasMusic);
+    const [musicVolume, setMusicVolume] = useState(configs.config.musicVolume);
+    const [hasSfx, setHasSfx] = useState(configs.config.hasSfx);
+    const [sfxVolume, setSfxVolume] = useState(configs.config.sfxVolume);
+    const [hasAnimBg, setHasAnimBg] = useState(configs.config.hasAnimBg);
+
+    useEffect(() => {
+
+        configs.setConfig(
+            pC => ({
+                ...pC,
+                hasMusic: hasMusic,
+                hasSfx: hasSfx,
+                hasAnimBg: hasAnimBg,
+                musicVolume: musicVolume,
+                sfxVolume: sfxVolume
+            })
+        );
+
+    }, [hasMusic, musicVolume, hasSfx, sfxVolume, hasAnimBg]);
 
     return (
         <div className="config">

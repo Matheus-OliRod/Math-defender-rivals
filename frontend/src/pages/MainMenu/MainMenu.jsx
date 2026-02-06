@@ -13,8 +13,6 @@ export default function MainMenu() {
 
     const userContext = useContext(UserContext);
 
-    console.log(userContext);
-
     return (
         <div className="main-menu">
             <section className="qrcode-section">

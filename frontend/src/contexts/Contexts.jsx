@@ -5,7 +5,14 @@ import { ConfigContext } from "./ConfigContext";
 export const Contexts = ({ children }) => {
 
     const [users, setUsers] = useState([{ name: "sanomoref99" }]);
-    const [config, setConfig] = useState({ name: "Matheus" });
+    const [config, setConfig] = useState({
+        hasAnimBg: true,
+        hasMusic: true,
+        musicVolume: 50,
+        hasSfx: true,
+        sfxVolume: 50
+        }
+    );
     
     // Fetching data
     useEffect(() => {

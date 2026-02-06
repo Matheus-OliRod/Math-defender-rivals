@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-export default function MeteorBackground() {
+export default function MeteorBackground( {isVisible} ) {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -94,7 +94,7 @@ export default function MeteorBackground() {
     height: "100%",
     zIndex: 0,
     pointerEvents: "none",
-    display: "block"
+    display: (isVisible ? "block" : "none")
   }}
 />
   );
