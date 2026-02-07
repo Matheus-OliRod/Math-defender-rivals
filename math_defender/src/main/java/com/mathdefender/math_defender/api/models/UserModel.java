@@ -2,6 +2,7 @@ package com.mathdefender.math_defender.api.models;
 
 import java.util.UUID;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -14,6 +15,7 @@ public class UserModel {
 
     @Id
     @GeneratedValue
+    @Column(columnDefinition = "BINARY(16)")
     private UUID id;
     private String email;
     private String name;
@@ -22,6 +24,7 @@ public class UserModel {
     private int lastScore;
     private boolean status;
     private String role;
+    private float prevDifficulty;
 
     public UserModel() {
 
@@ -60,6 +63,10 @@ public class UserModel {
     public boolean getStatus() {
         return status;
     }
+    
+    public float getPrevDifficulty() {
+    	return prevDifficulty;
+    }
 
     // Setters
 
@@ -93,5 +100,9 @@ public class UserModel {
 
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    public void setlastDifficulty(float prevDifficulty) {
+        this.prevDifficulty = prevDifficulty;
     }
 }

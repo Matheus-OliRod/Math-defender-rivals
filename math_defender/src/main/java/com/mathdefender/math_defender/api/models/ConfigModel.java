@@ -14,7 +14,6 @@ import jakarta.persistence.Table;
 public class ConfigModel {
     
     @Id
-    @GeneratedValue
     private UUID player_id;
 
     @OneToOne

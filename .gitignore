@@ -23,7 +23,37 @@
 /frontend/yarn-error.log*
 
 .TODO.txt
-# For backend files
 
-/math_defender/src/test/*
-/math_defender/src/main/resources/application.properties
+math_defender/HELP.md
+math_defender/target/
+math_defender/.mvn/wrapper/maven-wrapper.jar
+math_defender/!**/src/main/**/target/
+math_defender/!**/src/test/**/target/
+math_defender/
+math_defender/### STS ###
+math_defender/.apt_generated
+math_defender/.classpath
+math_defender/.factorypath
+math_defender/.project
+math_defender/.settings
+math_defender/.springBeans
+math_defender/.sts4-cache
+math_defender/
+math_defender/### IntelliJ IDEA ###
+math_defender/.idea
+math_defender/*.iws
+math_defender/*.iml
+math_defender/*.ipr
+math_defender/
+math_defender/### NetBeans ###
+math_defender/nbproject/private/
+math_defender/nbbuild/
+math_defender/dist/
+math_defender/nbdist/
+math_defender/.nb-gradle/
+math_defender/build/
+math_defender/!**/src/main/**/build/
+math_defender/!**/src/test/**/build/
+math_defender/
+math_defender/### VS Code ###
+math_defender/.vscode/
