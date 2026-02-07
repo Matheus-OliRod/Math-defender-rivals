@@ -4,7 +4,17 @@ import { ConfigContext } from "./ConfigContext";
 
 export const Contexts = ({ children }) => {
 
-    const [users, setUsers] = useState([{ name: "sanomoref99" }]);
+    const [users, setUsers] = useState([
+        {
+            name: "guest",
+            bestScore: 0,
+            rival: "",
+            email: "",
+            
+        }
+    ]);
+
+
     const [config, setConfig] = useState({
         hasAnimBg: true,
         hasMusic: true,

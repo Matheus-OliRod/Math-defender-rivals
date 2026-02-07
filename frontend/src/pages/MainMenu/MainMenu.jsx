@@ -55,7 +55,7 @@ export default function MainMenu() {
             </section>
 
             <section className="leaderboard-section">
-                {leaderboard.map(player => {<h2 key={player.id}>{player.name}</h2>})}
+                {leaderboard.map(player => {return <h2 key={player.id}>{player.name}</h2>})}
             </section>
         </div>
     );
