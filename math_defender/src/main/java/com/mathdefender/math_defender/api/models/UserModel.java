@@ -102,7 +102,7 @@ public class UserModel {
         this.status = status;
     }
 
-    public void setlastDifficulty(float prevDifficulty) {
+    public void setprevDifficulty(float prevDifficulty) {
         this.prevDifficulty = prevDifficulty;
     }
 }

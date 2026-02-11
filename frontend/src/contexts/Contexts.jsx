@@ -4,33 +4,35 @@ import { ConfigContext } from "./ConfigContext";
 
 export const Contexts = ({ children }) => {
 
-    const [users, setUsers] = useState([
-        {
-            name: "guest",
-            bestScore: 0,
-            rival: "",
-            email: "",
-            
-        }
-    ]);
+    const [users, setUsers] = useState([]);
+    const [currentUser, setCurrentUser] = useState(null);
+    const [config, setConfig] = useState(null);
 
-
-    const [config, setConfig] = useState({
-        hasAnimBg: true,
-        hasMusic: true,
-        musicVolume: 50,
-        hasSfx: true,
-        sfxVolume: 50
-        }
-    );
+    const API = "http://localhost:8080";
     
     // Fetching data
     useEffect(() => {
 
+        fetch(`${API}/players/getAllUsers`)
+        .then(res => res.json())
+        .then(data => {
+            // Sorting players
+            data.sort((a, b) => b.bestScore - a.bestScore);
+            setUsers(data);
+        })
+        .catch("Failed to load players. \nErr: ");
+
     }, []);
 
+    // Fetching config for when player changes
+    useEffect(() => {
+
+        fetch(`${API}/config/`)
+
+    }, [currentUser]);
+
     return (
-        <UserContext.Provider value={{ users, setUsers }}>
+        <UserContext.Provider value={{ users, currentUser, setCurrentUser }}>
             <ConfigContext.Provider value={{ config, setConfig }}>
                 {children}
             </ConfigContext.Provider>

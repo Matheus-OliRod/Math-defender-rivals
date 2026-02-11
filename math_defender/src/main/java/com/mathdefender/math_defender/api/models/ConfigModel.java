@@ -14,11 +14,13 @@ import jakarta.persistence.Table;
 public class ConfigModel {
     
     @Id
-    private UUID player_id;
-
+    @GeneratedValue
+    private UUID id;
+    
     @OneToOne
     @JoinColumn(name = "player_id", unique = true)
     private UserModel user;
+    
     private int musicVolume;
     private int sfxVolume;
     private boolean hasMusic;
