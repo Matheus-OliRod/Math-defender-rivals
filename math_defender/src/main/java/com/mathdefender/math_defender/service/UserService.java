@@ -9,7 +9,7 @@ public interface UserService {
 
     public UserModel saveUser(UserModel user);
     public List<UserModel> getAllUsers();
-    public UserModel updateUserModel(UserModel user, UUID id);
+    public UserModel updateUser(UserModel user, UUID id);
 } 
 
     
