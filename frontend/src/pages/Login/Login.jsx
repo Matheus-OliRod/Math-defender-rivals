@@ -1,14 +1,36 @@
-import { useRef, useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Login.css";
 import logo from "@res/images/ethereal-logo-no-bg.png";
-export default function Login( { setLogged }) {
+import { UserContext } from "../../contexts/UserContext";
+export default function Login() {
+
+    const userContext = useContext(UserContext);
 
     const [userEmail, setUserEmail] = useState("");
     const [userName, setUserName] = useState("");
 
-    const handleLogin = () => {
-        console.trace("TODO: Add credentials verification before backend");
+    const createUser = (userName, userEmail) => {
+
+
+    };
+
+    const login = () => {
+    const userByEmail = userContext.users.find(u => u.email === userEmail);
+
+    if (userByEmail) {
+        if (userByEmail.name === userName) {
+            // correct login
+
+            userContext.setCurrentUser(userByEmail);
+        } else {
+
+            // email exists but name differs
+            alert("This email is already registered with a different name.");
+        }
+    } else {
+        createUser({ userName, userEmail });
+    }
     };
 
     return (
@@ -33,7 +55,7 @@ export default function Login( { setLogged }) {
                     onChange={(e) => setUserName(e.target.value)}
                     value={userName} />
                     
-                    <Link to="/main-menu"><button onClick={handleLogin}>Entrar</button></Link>
+                    <Link to="/main-menu/:player_id"><button onClick={login}>Entrar</button></Link>
                 </div>
             </div>
 

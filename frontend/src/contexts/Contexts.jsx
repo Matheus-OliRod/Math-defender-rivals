@@ -6,7 +6,13 @@ export const Contexts = ({ children }) => {
 
     const [users, setUsers] = useState([]);
     const [currentUser, setCurrentUser] = useState(null);
-    const [config, setConfig] = useState(null);
+    const [config, setConfig] = useState({
+                hasAnimBg: true,
+                hasSfx: true,
+                hasMusic: true,
+                sfxVolume: 50,
+                musicVolume: 50
+            });
 
     const API = "http://localhost:8080";
     
@@ -20,14 +26,24 @@ export const Contexts = ({ children }) => {
             data.sort((a, b) => b.bestScore - a.bestScore);
             setUsers(data);
         })
-        .catch("Failed to load players. \nErr: ");
+        .catch(err => console.error("Failed to load players. \nErr: ", err));
 
     }, []);
 
     // Fetching config for when player changes
     useEffect(() => {
 
-        fetch(`${API}/config/`)
+        if(!currentUser) return;
+
+        // Fetching Config file for the user
+
+        fetch(`${API}/config/${currentUser.id}`)
+        .then(res => {
+            if(!res.ok) throw new Error("failed to fetch config");
+            return res.json();
+        })
+        .then(data => setConfig(data))
+        .catch(err => console.error("Failed to fetch config file. \nErr: ", err));
 
     }, [currentUser]);
 
