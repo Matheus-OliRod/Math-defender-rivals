@@ -24,6 +24,7 @@ const router = createBrowserRouter([
 function App() {
 
   const configContext = useContext(ConfigContext);
+  console.log(configContext);
 
   return (
     <div className="App container">
