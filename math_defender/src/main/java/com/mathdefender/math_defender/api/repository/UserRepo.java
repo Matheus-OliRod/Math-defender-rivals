@@ -1,5 +1,6 @@
 package com.mathdefender.math_defender.api.repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,5 +10,5 @@ import com.mathdefender.math_defender.api.models.UserModel;
 
 @Repository
 public interface UserRepo extends JpaRepository<UserModel, UUID> {
-    
+    Optional<UserModel> findByEmail(String email);
 }
