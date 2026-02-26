@@ -2,30 +2,41 @@ import { useContext, useEffect, useState } from "react";
 import BackToMenu from "../../components/back-to-menu/BackToMenu";
 import "./Config.css";
 import { ConfigContext } from "../../contexts/ConfigContext";
+import { UserContext } from "../../contexts/UserContext";
+import { API } from "../../contexts/Contexts";
 export default function Config() {
 
-    const configs = useContext(ConfigContext);
+    const { config, setConfig} = useContext(ConfigContext);
+    const { currentUser } = useContext(UserContext);
 
     // To be set on context
-    const [hasMusic, setHasMusic] = useState(configs.config.hasMusic);
-    const [musicVolume, setMusicVolume] = useState(configs.config.musicVolume);
-    const [hasSfx, setHasSfx] = useState(configs.config.hasSfx);
-    const [sfxVolume, setSfxVolume] = useState(configs.config.sfxVolume);
-    const [hasAnimBg, setHasAnimBg] = useState(configs.config.hasAnimBg);
+    const [hasMusic, setHasMusic] = useState(config.hasMusic);
+    const [musicVolume, setMusicVolume] = useState(config.musicVolume);
+    const [hasSfx, setHasSfx] = useState(config.hasSfx);
+    const [sfxVolume, setSfxVolume] = useState(config.sfxVolume);
+    const [hasAnimBg, setHasAnimBg] = useState(config.hasAnimBg);
 
     useEffect(() => {
 
-        configs.setConfig(
-            pC => ({
-                ...pC,
-                hasMusic: hasMusic,
-                hasSfx: hasSfx,
-                hasAnimBg: hasAnimBg,
-                musicVolume: musicVolume,
-                sfxVolume: sfxVolume
-            })
-        );
+                const newConfig = {
+                    ...config,
+                    hasMusic: hasMusic,
+                    hasSfx: hasSfx,
+                    hasAnimBg: hasAnimBg,
+                    musicVolume: musicVolume,
+                    sfxVolume: sfxVolume
+                }
 
+                fetch(`${API}/config/updateConfig/${currentUser.id}`, {
+                    method: "PUT",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify(newConfig)
+                })
+                .then(res => res.json())
+                .then(config => setConfig(config))
+                .catch(err => console.error("Falied to update config.\nErr: ", err));
+
+        
     }, [hasMusic, musicVolume, hasSfx, sfxVolume, hasAnimBg]);
 
     return (
