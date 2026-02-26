@@ -1,36 +1,52 @@
 import { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./Login.css";
 import logo from "@res/images/ethereal-logo-no-bg.png";
 import { UserContext } from "../../contexts/UserContext";
+import { API } from "../../contexts/Contexts.jsx";
 export default function Login() {
 
-    const userContext = useContext(UserContext);
+    const { users, setCurrentUser } = useContext(UserContext);
 
-    const [userEmail, setUserEmail] = useState("");
-    const [userName, setUserName] = useState("");
+    const navigate = useNavigate();
 
-    const createUser = (userName, userEmail) => {
+    const [email, setEmail] = useState("");
+    const [name, setName] = useState("");
 
+    const createUser = () => {
 
+        fetch(`${API}/players/add`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ name, email })
+        })
+        .then(res => res.json())
+        .then(user => {
+            setCurrentUser(user);
+            navigate(`/main-menu`);
+        })
+        .catch(err => console.error("Failed to add user. \nErr: ", err));
     };
 
     const login = () => {
-    const userByEmail = userContext.users.find(u => u.email === userEmail);
 
-    if (userByEmail) {
-        if (userByEmail.name === userName) {
-            // correct login
+        const userByEmail = users.find(u => u.email === email);
 
-            userContext.setCurrentUser(userByEmail);
+        if (userByEmail) {
+            console.log("USER FOUND");
+            if (userByEmail.name === name) {
+                setCurrentUser(userByEmail);
+                navigate(`/main-menu`);
+            } else {
+
+                alert("This email is already registered with a different name.");
+            }
         } else {
-
-            // email exists but name differs
-            alert("This email is already registered with a different name.");
+            console.log("USER CREATED");
+            createUser();
         }
-    } else {
-        createUser({ userName, userEmail });
-    }
     };
 
     return (
@@ -47,15 +63,15 @@ export default function Login() {
 
                 <div className="login-input-holder">
                     <input type="email" name="email" placeholder="Email"
-                    onChange={(e) => setUserEmail(e.target.value)}
-                    value={userEmail}
+                    onChange={(e) => setEmail(e.target.value)}
+                    value={email}
                      />
 
                     <input type="text" name="name" placeholder="Nome"
-                    onChange={(e) => setUserName(e.target.value)}
-                    value={userName} />
+                    onChange={(e) => setName(e.target.value)}
+                    value={name} />
                     
-                    <Link to="/main-menu/:player_id"><button onClick={login}>Entrar</button></Link>
+                    <button onClick={login}>Entrar</button>
                 </div>
             </div>
 
