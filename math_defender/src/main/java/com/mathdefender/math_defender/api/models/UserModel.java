@@ -5,6 +5,7 @@ import java.util.UUID;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -14,8 +15,7 @@ import jakarta.persistence.Table;
 public class UserModel {
 
     @Id
-    @GeneratedValue
-    @Column(columnDefinition = "BINARY(16)")
+    @Column(columnDefinition = "CHAR(36)")
     private UUID id;
     private String email;
     private String name;

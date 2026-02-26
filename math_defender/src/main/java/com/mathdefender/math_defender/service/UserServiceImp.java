@@ -23,6 +23,14 @@ public class UserServiceImp implements UserService {
 
     @Override
     public UserModel saveUser(UserModel user) {
+
+        // Verifying if user already exists
+        UserModel existing = userRepo.findByEmail(user.getEmail()).orElse(null);
+
+        if(user.getId() == null) {
+            user.setId(UUID.randomUUID());
+        }
+
         UserModel savedUser = userRepo.save(user);
         ConfigModel config = new ConfigModel();
 

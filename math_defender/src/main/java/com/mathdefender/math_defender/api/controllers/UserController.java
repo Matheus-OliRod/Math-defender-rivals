@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/players") // Players == Users. Named users for they might have different roles (dev, admin or just player)
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin
 public class UserController {
 
     @Autowired

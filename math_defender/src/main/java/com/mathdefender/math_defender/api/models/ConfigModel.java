@@ -2,10 +2,12 @@ package com.mathdefender.math_defender.api.models;
 
 import java.util.UUID;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -14,10 +16,10 @@ import jakarta.persistence.Table;
 public class ConfigModel {
     
     @Id
-    @GeneratedValue
     private UUID id;
     
     @OneToOne
+    @MapsId
     @JoinColumn(name = "player_id", unique = true)
     private UserModel user;
     

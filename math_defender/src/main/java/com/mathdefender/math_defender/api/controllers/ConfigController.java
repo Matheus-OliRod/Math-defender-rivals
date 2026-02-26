@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("/config")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin
 public class ConfigController {
 
     @Autowired
