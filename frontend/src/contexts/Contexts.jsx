@@ -15,22 +15,6 @@ export const Contexts = ({ children }) => {
                 musicVolume: 50
             });
 
-    
-    // Fetching data
-    useEffect(() => {
-
-        fetch(`${API}/players/getAllUsers`)
-        .then(res => res.json())
-        .then(data => {
-            // Sorting players
-            data.sort((a, b) => b.bestScore - a.bestScore);
-            setUsers(data);
-            setCurrentUser(data);
-        })
-        .catch(err => console.error("Failed to load players. \nErr: ", err));
-
-    }, []);
-
     // Fetching config for when player changes
     useEffect(() => {
 
@@ -49,7 +33,7 @@ export const Contexts = ({ children }) => {
     }, [currentUser]);
 
     return (
-        <UserContext.Provider value={{ users, currentUser, setCurrentUser }}>
+        <UserContext.Provider value={{ users, setUsers, currentUser, setCurrentUser }}>
             <ConfigContext.Provider value={{ config, setConfig }}>
                 {children}
             </ConfigContext.Provider>

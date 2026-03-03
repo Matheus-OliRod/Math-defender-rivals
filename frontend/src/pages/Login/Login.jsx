@@ -1,17 +1,32 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
 import logo from "@res/images/ethereal-logo-no-bg.png";
 import { UserContext } from "../../contexts/UserContext";
 import { API } from "../../contexts/Contexts.jsx";
 export default function Login() {
-
-    const { users, setCurrentUser } = useContext(UserContext);
+    
+    const { users, setUsers ,setCurrentUser } = useContext(UserContext);
 
     const navigate = useNavigate();
 
     const [email, setEmail] = useState("");
-    const [name, setName] = useState("");
+    const [name, setName] = useState("");    
+
+    // Fetching data
+    useEffect(() => {
+    
+        fetch(`${API}/players/getAllUsers`)
+        .then(res => res.json())
+        .then(data => {
+            // Sorting players
+            data.sort((a, b) => b.bestScore - a.bestScore);
+            setUsers(data);
+            setCurrentUser(data);
+        })
+        .catch(err => console.error("Failed to load players. \nErr: ", err));
+    
+    }, []);
 
     const createUser = () => {
 
@@ -25,9 +40,12 @@ export default function Login() {
         .then(res => res.json())
         .then(user => {
             setCurrentUser(user);
+            localStorage.setItem("user", user);
             navigate(`/main-menu`);
         })
         .catch(err => console.error("Failed to add user. \nErr: ", err));
+
+
     };
 
     const login = () => {
@@ -35,7 +53,6 @@ export default function Login() {
         const userByEmail = users.find(u => u.email === email);
 
         if (userByEmail) {
-            console.log("USER FOUND");
             if (userByEmail.name === name) {
                 setCurrentUser(userByEmail);
                 navigate(`/main-menu`);
@@ -44,7 +61,6 @@ export default function Login() {
                 alert("This email is already registered with a different name.");
             }
         } else {
-            console.log("USER CREATED");
             createUser();
         }
     };

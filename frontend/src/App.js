@@ -7,18 +7,33 @@ import HowToPlay from "./pages/HowToPlay/HowToPlay";
 import Leaderboard from "./pages/Leaderboard/Leaderboard";
 import MeteorBackground from './pages/MeteorBackground/MeteorBackground';
 import './App.css';
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Navigate, Outlet, RouterProvider } from "react-router-dom";
 import { useContext } from 'react';
 import { ConfigContext } from './contexts/ConfigContext';
 
+const ProtectedZone = () => {
+
+  const user = localStorage.getItem("user");
+
+  if(!user) return <Navigate to="/" replace />
+
+  return <Outlet />
+};
+
 const router = createBrowserRouter([
-  {path:"/", element: <Login />},
-  {path:"/main-menu", element: <MainMenu />},
-  {path:"/game-pane", element: <GamePane />},
-  {path:"/config", element: <Config /> },
-  {path:"/how-to-play", element: <HowToPlay />},
-  {path:"/compedium", element: <Compedium />},
-  {path:"/leaderboard", element: <Leaderboard />}
+  {
+    element: <ProtectedZone />,
+    children: [
+    {path:"/main-menu", element: <MainMenu />},
+    {path:"/game-pane", element: <GamePane />},
+    {path:"/config", element: <Config /> },
+    {path:"/how-to-play", element: <HowToPlay />},
+    {path:"/compedium", element: <Compedium />},
+    {path:"/leaderboard", element: <Leaderboard />}
+  ]},
+
+  {path:"/", element: <Login />}
+  
 ]);
 
 function App() {
