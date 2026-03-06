@@ -22,7 +22,7 @@ export const Contexts = ({ children }) => {
 
         // Fetching Config file for the user
 
-        fetch(`${API}/config/${currentUser.id}`)
+        fetch(`${API}/config/getConfig/${currentUser.id}`)
         .then(res => {
             if(!res.ok) throw new Error("failed to fetch config");
             return res.json();

@@ -19,18 +19,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @RestController
 @RequestMapping("/config")
-@CrossOrigin(origins = "http://localhost:3000", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+@CrossOrigin(origins = "http://localhost:3000", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
 public class ConfigController {
 
     @Autowired
     private ConfigService configService;
     
-    @GetMapping("/{userId}")
+    @GetMapping("/getConfig/{userId}")
     public ConfigModel getConfig(@PathVariable UUID userId) {
         return configService.findConfigByUserId(userId);
     }
     
-    @PutMapping("/{userId}")
+    @PutMapping("/updateConfig/{userId}")
     public ConfigModel updateConfig(@RequestBody ConfigModel config, @PathVariable UUID userId) {
         
         return configService.updateConfig(config, userId);
