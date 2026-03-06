@@ -16,6 +16,7 @@ import jakarta.persistence.Table;
 public class ConfigModel {
     
     @Id
+    @Column(columnDefinition = "CHAR(36")
     private UUID id;
     
     @OneToOne

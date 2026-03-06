@@ -22,7 +22,7 @@ export default function Login() {
             // Sorting players
             data.sort((a, b) => b.bestScore - a.bestScore);
             setUsers(data);
-            setCurrentUser(data);
+            setCurrentUser(data.find(users => users.email == email));
         })
         .catch(err => console.error("Failed to load players. \nErr: ", err));
     
