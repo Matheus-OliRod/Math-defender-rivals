@@ -15,22 +15,11 @@ export const Contexts = ({ children }) => {
                 musicVolume: 50
             });
 
-    // Fetching config for when player changes
     useEffect(() => {
+        const prevUser = localStorage.getItem("user");
 
-        if(!currentUser) return;
-
-        // Fetching Config file for the user
-
-        fetch(`${API}/config/getConfig/${currentUser.id}`)
-        .then(res => {
-            if(!res.ok) throw new Error("failed to fetch config");
-            return res.json();
-        })
-        .then(data => setConfig(data))
-        .catch(err => console.error("Failed to fetch config file. \nErr: ", err, "\nCurrent User: ", currentUser));
-
-    }, [currentUser]);
+        if(prevUser) setCurrentUser(prevUser); // Setting user if he already was logged last session
+    }, []);
 
     return (
         <UserContext.Provider value={{ users, setUsers, currentUser, setCurrentUser }}>

@@ -27,6 +27,8 @@ public class UserServiceImp implements UserService {
         // Verifying if user already exists
         UserModel existing = userRepo.findByEmail(user.getEmail()).orElse(null);
 
+        if(existing != null) throw new RuntimeException("User already exists");
+
         if(user.getId() == null) {
             user.setId(UUID.randomUUID());
         }
@@ -61,9 +63,16 @@ public class UserServiceImp implements UserService {
         user.setBestScore(updatedUser.getBestScore());
         user.setLastScore(updatedUser.getLastScore());
         user.setName(updatedUser.getName());
-        user.setRivalName(updatedUser.getRivalName());
+        user.setRivalEmail(updatedUser.getRivalEmail());
 
         return userRepo.save(user); 
+    }
+
+    @Override
+    public UserModel getUserByEmail(String email) {
+        UserModel user = userRepo.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+
+        return user;
     }
     
 }
