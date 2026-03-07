@@ -10,6 +10,7 @@ public interface UserService {
     public UserModel saveUser(UserModel user);
     public List<UserModel> getAllUsers();
     public UserModel updateUser(UserModel user, UUID id);
+    public UserModel getUserByEmail(String email);
 } 
 
     

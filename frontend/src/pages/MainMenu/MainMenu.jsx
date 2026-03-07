@@ -1,17 +1,35 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { API } from "../../contexts/Contexts";
 import "./MainMenu.css";
 import { UserContext } from "../../contexts/UserContext";
 
-export default function MainMenu() {
+export default function MainMenu() {    
 
-    // To be changed into User context
-    const [playerBestScore] = useState(10000);
-    const [playerRank] = useState(1);
-    const [rivalRank] = useState(2);
+    const {users, setUsers, currentUser} = useContext(UserContext);
+
+    // Fetching data
+    useEffect(() => {
+        
+        fetch(`${API}/players/getAllUsers`)
+        .then(res => res.json())
+        .then(data => {
+            // Sorting players
+            data.sort((a, b) => b.bestScore - a.bestScore);
+            setUsers(data);
+        })
+        .catch(err => console.error("Failed to load players. \nErr: ", err));
+        
+    }, []);
+
+    const getRank = () => {
+
+    };
+
+    const [playerBestScore] = useState(currentUser.bestScore);
+    const [playerRank] = useState(getRank(currentUser));
+    const [rivalRank] = useState(getRank(currentUser.rivalEmail));
     const [leaderboard] = useState([]);
-
-    const userContext = useContext(UserContext);
 
     return (
         <div className="main-menu">
@@ -59,4 +77,15 @@ export default function MainMenu() {
             </section>
         </div>
     );
+}
+
+function QRCode() {
+    const [url] = useState(window.location.origin);
+
+    return(
+        <img
+            src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}`}
+            alt={url}
+         />
+    )
 }

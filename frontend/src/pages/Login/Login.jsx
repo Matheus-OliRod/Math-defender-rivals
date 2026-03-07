@@ -6,26 +6,15 @@ import { UserContext } from "../../contexts/UserContext";
 import { API } from "../../contexts/Contexts.jsx";
 export default function Login() {
     
-    const { users, setUsers ,setCurrentUser } = useContext(UserContext);
+    const { currentUser, setCurrentUser } = useContext(UserContext);
 
     const navigate = useNavigate();
 
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");    
 
-    // Fetching data
     useEffect(() => {
-    
-        fetch(`${API}/players/getAllUsers`)
-        .then(res => res.json())
-        .then(data => {
-            // Sorting players
-            data.sort((a, b) => b.bestScore - a.bestScore);
-            setUsers(data);
-            setCurrentUser(data.find(users => users.email == email));
-        })
-        .catch(err => console.error("Failed to load players. \nErr: ", err));
-    
+        if(currentUser) navigate("/main-menu");
     }, []);
 
     const createUser = () => {
@@ -48,22 +37,23 @@ export default function Login() {
 
     };
 
-    const login = () => {
+    const verifyAccount = () => {
 
-        const userByEmail = users.find(u => u.email === email);
-
-        if (userByEmail) {
-            if (userByEmail.name === name) {
-                setCurrentUser(userByEmail);
-                navigate(`/main-menu`);
-            } else {
-
-                alert("This email is already registered with a different name.");
+        fetch(`${API}/players/getUserByEmail`, {
+            method: "GET",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({email: email})
+        })
+        .then(res => res.json())
+        .then(user => {
+            if(user.name !== name) alert("Account already logged on another name.")
+            else {
+                setCurrentUser(user);
+                navigate("main-menu");    
             }
-        } else {
-            createUser();
-        }
-    };
+        })
+        .catch(createUser);
+    }
 
     return (
         <div className="container login">
@@ -87,7 +77,7 @@ export default function Login() {
                     onChange={(e) => setName(e.target.value)}
                     value={name} />
                     
-                    <button onClick={login}>Entrar</button>
+                    <button onClick={verifyAccount}>Entrar</button>
                 </div>
             </div>
 

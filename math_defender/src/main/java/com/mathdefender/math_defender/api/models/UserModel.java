@@ -15,9 +15,11 @@ public class UserModel {
     @Id
     @Column(columnDefinition = "CHAR(36)")
     private UUID id;
+
+    @Column(unique = true) // Prevents duplicates
     private String email;
     private String name;
-    private String rivalName;
+    private String rivalEmail;
     private int bestScore;
     private int lastScore;
     private boolean status;
@@ -50,8 +52,8 @@ public class UserModel {
         return name;
     }
 
-    public String getRivalName() {
-        return rivalName;
+    public String getRivalEmail() {
+        return rivalEmail;
     }
 
     public String getRole() {
@@ -88,8 +90,8 @@ public class UserModel {
         this.name = name;
     }
 
-    public void setRivalName(String rivalName) {
-        this.rivalName = rivalName;
+    public void setRivalEmail(String rivalEmail) {
+        this.rivalEmail = rivalEmail;
     }
     
     public void setRole(String role) {
