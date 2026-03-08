@@ -15,12 +15,6 @@ export const Contexts = ({ children }) => {
                 musicVolume: 50
             });
 
-    useEffect(() => {
-        const prevUser = localStorage.getItem("user");
-
-        if(prevUser) setCurrentUser(prevUser); // Setting user if he already was logged last session
-    }, []);
-
     return (
         <UserContext.Provider value={{ users, setUsers, currentUser, setCurrentUser }}>
             <ConfigContext.Provider value={{ config, setConfig }}>
