@@ -4,6 +4,7 @@ import "./Login.css";
 import logo from "@res/images/ethereal-logo-no-bg.png";
 import { UserContext } from "../../contexts/UserContext";
 import { API } from "../../contexts/Contexts.jsx";
+
 export default function Login() {
     
     const { currentUser, setCurrentUser } = useContext(UserContext);
@@ -12,10 +13,6 @@ export default function Login() {
 
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");    
-
-    useEffect(() => {
-        if(currentUser) navigate("/main-menu");
-    }, []);
 
     const createUser = () => {
 
@@ -29,30 +26,36 @@ export default function Login() {
         .then(res => res.json())
         .then(user => {
             setCurrentUser(user);
-            localStorage.setItem("user", user);
             navigate(`/main-menu`);
         })
         .catch(err => console.error("Failed to add user. \nErr: ", err));
-
 
     };
 
     const verifyAccount = () => {
 
-        fetch(`${API}/players/getUserByEmail`, {
-            method: "GET",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({email: email})
+        if(!name || !email) {
+            alert("Preencha todos os campos!");
+            return;
+        }
+
+        fetch(`${API}/players/getUserByEmail/${email}`, {
+            method: "GET"
         })
-        .then(res => res.json())
+        .then(res => {
+            return res.json();
+        })
         .then(user => {
-            if(user.name !== name) alert("Account already logged on another name.")
+            if(user.name != name) alert("Account already logged on another name.");
+            else if(!user) {
+                createUser();
+            }
             else {
                 setCurrentUser(user);
                 navigate("main-menu");    
             }
         })
-        .catch(createUser);
+        .catch(err => console.error("Failed to verify user.\nError: ", err));
     }
 
     return (

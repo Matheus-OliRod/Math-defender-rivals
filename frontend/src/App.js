@@ -10,12 +10,13 @@ import './App.css';
 import { createBrowserRouter, Navigate, Outlet, RouterProvider } from "react-router-dom";
 import { useContext } from 'react';
 import { ConfigContext } from './contexts/ConfigContext';
+import { UserContext } from './contexts/UserContext';
 
 const ProtectedZone = () => {
 
-  const user = localStorage.getItem("user");
+  const {currentUser} = useContext(UserContext);
 
-  if(!user) return <Navigate to="/" replace />
+  if(!currentUser) return <Navigate to="/" replace />
 
   return <Outlet />
 };
