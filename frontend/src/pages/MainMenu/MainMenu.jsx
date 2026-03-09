@@ -29,12 +29,12 @@ export default function MainMenu() {
     const [playerBestScore] = useState(currentUser.bestScore);
     const [playerRank] = useState(getRank(currentUser));
     const [rivalRank] = useState(getRank(currentUser.rivalEmail));
-    const [leaderboard] = useState([]);
+    const [leaderboard] = useState(users);
 
     return (
         <div className="main-menu">
             <section className="qrcode-section">
-                <img src="#" alt="Page Link" /> {/* This will hold the QR code to the game for mobile */}
+                <QRCode />
             </section>
 
             <section className="main-section">
@@ -73,7 +73,7 @@ export default function MainMenu() {
             </section>
 
             <section className="leaderboard-section">
-                {leaderboard.map(player => {return <h2 key={player.id}>{player.name}</h2>})}
+                {leaderboard.map(player => {return <h2 className="leaderboard-item" key={player.id}>{player.name}</h2>})}
             </section>
         </div>
     );

@@ -16,7 +16,8 @@ export default function Question(difficulty) {
         powerup_value: 0,
         answer: 0,
         id: crypto.randomUUID(),
-        index: index
+        index: index,
+        secondsPassed: 0
     };
 
     // Question Creation Logic

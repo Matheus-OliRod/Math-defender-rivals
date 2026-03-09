@@ -7,6 +7,7 @@ import Question from "../../logic/game-loop/Question";
 export default function GamePane() {
 
     const spawnIntervalRef = useRef(null);
+    const gameClock = useRef(null);
 
     const [enemies, setEnemies] = useState([]); // Will contain question objects
     const [defeated, setDefeated] = useState([]); // All equations solved. Will be send to backend to verify and calculate actual score
@@ -15,6 +16,7 @@ export default function GamePane() {
     const [currentDifficulty, setCurrentDifficulty] = useState(0);
     const [currentScore, setCurrentScore] = useState(0);
     const [rivalBestScore] = useState(0);
+    const [secondsPassed, setSecondsPassed] = useState(0); // Used to verify the speed from answers
     const [isGameOver, setIsGameOver] = useState(false);
 
     const [givenAnswer, setGivenAnswer] = useState("");
@@ -36,12 +38,50 @@ export default function GamePane() {
             })
         }, 2000);
 
+        // Counts seconds in game
+        gameClock.current = setInterval(() => {
+            setSecondsPassed(pS => pS + 1);
+        }, 1000);
+
         return () => {
            clearInterval(spawnIntervalRef.current);
+           clearInterval(gameClock.current);
            spawnIntervalRef.current = null;
         }
 
     }, [isGameOver]);
+
+    /**
+     * Will sum the value of the last solved question based on difficulty and time elapsed.
+     * 
+     * The time elapsed will consider the last and the seconds last question solved, to calculate the time spent to solve it.
+     * 
+     * The first item will reduce 0, since it was the first question.
+     * 
+     * The equation goes as follows: (defeated.length * currentDifficulty) + secondsPassed / (lastEnemy.secondsPassed - secondLastEnemy.secondsPassed) /2) + 1
+     * 
+     * NOTICE: This is only a preview of the score, all questions will be sent to the backend to do the calculation again. This being to verify the integrity and veracity of the score. This functions serves as a preview. The real score that will be stored is processed on the backend.
+     */
+    const sumToScore = () => {
+
+        const toAdd = 0; // The final value that will be awarded
+
+        // Scoring first answer
+        if(defeated.length === 1) {
+            const lastEnemy = defeated[defeated.length - 1];
+
+            toAdd = ((currentDifficulty) + secondsPassed) / (((lastEnemy.secondsPassed) /2) + 1);
+        }
+
+        else {
+            const lastEnemy = defeated[defeated.length - 1];
+            const secondLastEnemy = defeated[defeated.length - 2];
+
+            toAdd = ((defeated.length * currentDifficulty) + secondsPassed) / (((lastEnemy.secondsPassed - secondLastEnemy.secondsPassed) /2) + 1);
+        }
+
+        setCurrentScore(prevScore => prevScore + toAdd);
+    };
 
     /**
      * Creates a new question and appends to the enemies list
@@ -49,6 +89,16 @@ export default function GamePane() {
     const createQuestion = () => {
         const enemy = Question(currentDifficulty);
         return enemy;
+    }
+
+    const updateStats = (enemy) => {
+
+        setDefeated(pD => [...pD, {
+
+        }]);
+        setCurrentDifficulty(parseInt(defeated.length/10));
+        sumToScore();
+        setGivenAnswer("");
     }
 
     /**
@@ -65,9 +115,7 @@ export default function GamePane() {
                 ));
         
                 // Updating stats
-                setDefeated(pD => pD + 1);
-                setCurrentDifficulty(parseInt(defeated.length/10));
-                setGivenAnswer("");
+                updateStats(enemy);
 
                 break;
             }
