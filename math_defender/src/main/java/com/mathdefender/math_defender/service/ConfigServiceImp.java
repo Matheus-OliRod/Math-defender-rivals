@@ -15,9 +15,6 @@ public class ConfigServiceImp implements ConfigService {
     @Autowired
     private ConfigRepo configRepo;
 
-    @Autowired
-    private UserRepo userRepo;
-
     public ConfigServiceImp(ConfigRepo configRepo) {
         this.configRepo = configRepo;
     }
