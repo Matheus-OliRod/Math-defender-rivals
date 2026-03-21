@@ -1,20 +1,26 @@
-import { useEffect, useRef, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import {Link} from "react-router-dom";
 import "./GamePane.css";
 import QuestionComponent from "../../components/question/QuestionComponent";
 import Question from "../../logic/game-loop/Question";
+import { UserContext } from "../../contexts/UserContext";
+import { API } from "../../contexts/Contexts";
 
 export default function GamePane() {
+
+    const { currentUser, setCurrentUser } = useContext(UserContext);
 
     const spawnIntervalRef = useRef(null);
     const gameClock = useRef(null);
 
     const [enemies, setEnemies] = useState([]); // Will contain question objects
+    const [lastEnemy, setLastEnemy] = useState(null);
     const [defeated, setDefeated] = useState([]); // All equations solved. Will be send to backend to verify and calculate actual score
     const [playerHealth, setPlayerHealth] = useState(3);
 
-    const [currentDifficulty, setCurrentDifficulty] = useState(0);
+    const [currentDifficulty, setCurrentDifficulty] = useState((currentUser.prevDifficulty - 2 < 0) ? 0 : currentUser.prevDifficulty - 2);
     const [currentScore, setCurrentScore] = useState(0);
+    
     const [rivalBestScore] = useState(0);
     const [secondsPassed, setSecondsPassed] = useState(0); // Used to verify the speed from answers
     const [isGameOver, setIsGameOver] = useState(false);
@@ -51,6 +57,23 @@ export default function GamePane() {
 
     }, [isGameOver]);
 
+    const updateCurrentUser = () => {
+
+        const updatedCurrentUser = {...currentUser,
+            bestScore: currentScore,
+            prevDifficulty: currentDifficulty    
+        };
+
+        fetch(`${API}/players/updateUser/${currentUser.id}`, {
+            method: "PUT",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(updatedCurrentUser)
+        })
+        .then(res => res.json())
+        .then(setCurrentUser(updatedCurrentUser))
+        .catch(err => console.err("Couldn't update user"));
+    };
+
     /**
      * Will sum the value of the last solved question based on difficulty and time elapsed.
      * 
@@ -58,29 +81,26 @@ export default function GamePane() {
      * 
      * The first item will reduce 0, since it was the first question.
      * 
-     * The equation goes as follows: (defeated.length * currentDifficulty) + secondsPassed / (lastEnemy.secondsPassed - secondLastEnemy.secondsPassed) /2) + 1
+     * The equation goes as follows: currentDifficulty * (defeated.length + secondsPassed/(lastEnemy.passedTime - secondLastEnemy.passedTime + 1))
      * 
      * NOTICE: This is only a preview of the score, all questions will be sent to the backend to do the calculation again. This being to verify the integrity and veracity of the score. This functions serves as a preview. The real score that will be stored is processed on the backend.
      */
-    const sumToScore = () => {
+    const sumToScore = (enemy) => {
 
-        const toAdd = 0; // The final value that will be awarded
+        let toAdd = 0; // The final value that will be awarded
 
         // Scoring first answer
-        if(defeated.length === 1) {
-            const lastEnemy = defeated[defeated.length - 1];
-
-            toAdd = ((currentDifficulty) + secondsPassed) / (((lastEnemy.secondsPassed) /2) + 1);
+        if(lastEnemy == null) {
+            toAdd = currentDifficulty * (1 + (secondsPassed/(enemy.secondsPassed + 1)));
         }
 
         else {
-            const lastEnemy = defeated[defeated.length - 1];
-            const secondLastEnemy = defeated[defeated.length - 2];
-
-            toAdd = ((defeated.length * currentDifficulty) + secondsPassed) / (((lastEnemy.secondsPassed - secondLastEnemy.secondsPassed) /2) + 1);
+            toAdd = currentDifficulty * (currentDifficulty + (secondsPassed/(enemy.secondsPassed - lastEnemy.secondsPassed + 1)));
         }
 
-        setCurrentScore(prevScore => prevScore + toAdd);
+        if(toAdd > 3000) toAdd = 3000; // Hard capping scores
+        setCurrentScore(prevScore => prevScore + parseInt(toAdd));
+        setLastEnemy(enemy);
     };
 
     /**
@@ -91,13 +111,20 @@ export default function GamePane() {
         return enemy;
     }
 
+    /**
+     * 
+     * Updates in game stats, like current difficulty, score...
+     * 
+     * @param {Object} enemy 
+     */
     const updateStats = (enemy) => {
 
-        setDefeated(pD => [...pD, {
+        enemy.secondsPassed = secondsPassed;
 
-        }]);
-        setCurrentDifficulty(parseInt(defeated.length/10));
-        sumToScore();
+        setDefeated(pD => [...pD, enemy]);
+
+        setCurrentDifficulty(parseInt(defeated.length/2) + 1);
+        sumToScore(enemy);
         setGivenAnswer("");
     }
 
@@ -125,6 +152,9 @@ export default function GamePane() {
     }
 
     const triggerGameOver = () => {
+
+        if(currentUser.bestScore < currentScore) updateCurrentUser();
+
         setIsGameOver(true);
         setEnemies([]);
     }

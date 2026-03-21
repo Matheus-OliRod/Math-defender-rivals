@@ -70,7 +70,14 @@ public class UserServiceImp implements UserService {
 
     @Override
     public UserModel getUserByEmail(String email) {
-        UserModel user = userRepo.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        UserModel user = userRepo.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found (Find by Email)"));
+
+        return user;
+    }
+
+    @Override
+    public UserModel getUserById(UUID id) {
+        UserModel user = userRepo.findById(id).orElseThrow(() -> new RuntimeException("User not found (Find by ID)"));
 
         return user;
     }
