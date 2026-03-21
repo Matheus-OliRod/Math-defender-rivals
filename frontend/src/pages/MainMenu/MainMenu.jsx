@@ -22,13 +22,23 @@ export default function MainMenu() {
         
     }, []);
 
-    const getRank = () => {
+    const getRank = (email) => {
+        for(let i = 0; i < users.length; i++) {
+            
+            if(users[i].email == email) {
+                return i + 1;
+            }
 
+            // In case the user haven't set a rival
+            else {
+                return "SEM RIVAL";
+            }
+        }
     };
 
     const [playerBestScore] = useState(currentUser.bestScore);
-    const [playerRank] = useState(getRank(currentUser));
-    const [rivalRank] = useState(getRank(currentUser.rivalEmail));
+    const [playerRank] = useState(getRank(currentUser.email));
+    const [rivalRank] = useState(getRank(currentUser.rivalEmail ? currentUser.rivalEmail : "null"));
     const [leaderboard] = useState(users);
 
     return (
@@ -73,7 +83,11 @@ export default function MainMenu() {
             </section>
 
             <section className="leaderboard-section">
-                {leaderboard.map(player => {return <h2 className="leaderboard-item" key={player.id}>{player.name}</h2>})}
+                {
+                    leaderboard.map((user, index) => {
+                        return <h2 className="leaderboard-item" key={user.id}>{`${index + 1}º - ${user.name}`}</h2>
+                    })
+                }
             </section>
         </div>
     );

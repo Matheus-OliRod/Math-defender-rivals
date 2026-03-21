@@ -6,21 +6,16 @@ export default function Question(difficulty) {
 
     // Contains all the data to be use on the game logic.
     // Operation consist on the full operation String
-    // Powerup is about having special questions to grant a small boost
-    // powerup value is the measure of the benefit given to the player 
     // answer is the expected input from the user
     // index ranges from 0 to 9, indicating the spawn position
     const question_data = { 
         operation: "",
-        powerup: "normal",
-        powerup_value: 0,
+        basevalue: 0,
         answer: 0,
         id: crypto.randomUUID(),
         index: index,
         secondsPassed: 0
     };
-
-    // Question Creation Logic
 
     // TEST
     appendAddition(question_data, difficulty);
@@ -31,7 +26,7 @@ export default function Question(difficulty) {
 
 function appendAddition(question_data, difficulty) {
 
-    const value = Math.ceil(Math.random()*10*(difficulty+1));
+    const value = Math.ceil(Math.random()*(difficulty+1));
 
     if(!question_data.operation) {
         question_data.operation = value + "";
@@ -40,12 +35,13 @@ function appendAddition(question_data, difficulty) {
     }
 
     question_data.operation += " + " + value;
+    question_data.baseValue += 100;
     question_data.answer = eval(question_data.operation);
 }
 
 function appendSubtraction(question_data, difficulty) {
 
-    const value = Math.ceil(Math.random()*10*(difficulty+1));
+    const value = Math.ceil(Math.random()*(difficulty+1));
 
     if(!question_data.operation) {
         question_data.operation = value + "";
@@ -54,11 +50,12 @@ function appendSubtraction(question_data, difficulty) {
     }
 
     question_data.operation += " - " + value;
+    question_data.baseValue += 100;
     question_data.answer = eval(question_data.operation);
 }
 
 function appendMultiplication(question_data, difficulty) {
-    const value = Math.ceil(Math.random()*5*(difficulty/2));
+    const value = Math.ceil(Math.random()*0.5*(difficulty/2));
 
     if(!question_data.operation) {
         question_data.operation = value + "";
@@ -67,6 +64,7 @@ function appendMultiplication(question_data, difficulty) {
     }
 
     question_data.operation += " * " + value;
+    question_data.baseValue += 150;
     question_data.answer = eval(question_data.operation);
 }
 

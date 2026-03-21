@@ -11,6 +11,7 @@ public interface UserService {
     public List<UserModel> getAllUsers();
     public UserModel updateUser(UserModel user, UUID id);
     public UserModel getUserByEmail(String email);
+    public UserModel getUserById(UUID id);
 } 
 
     
