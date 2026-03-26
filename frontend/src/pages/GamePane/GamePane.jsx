@@ -60,7 +60,6 @@ export default function GamePane() {
     const updateCurrentUser = () => {
 
         const updatedCurrentUser = {...currentUser,
-            bestScore: currentScore,
             prevDifficulty: currentDifficulty    
         };
 
@@ -91,7 +90,7 @@ export default function GamePane() {
 
         // Scoring first answer
         if(lastEnemy == null) {
-            toAdd = currentDifficulty * (1 + (secondsPassed/(enemy.secondsPassed + 1)));
+            toAdd = 1 * (1 + (secondsPassed/(enemy.secondsPassed + 1)));
         }
 
         else {

@@ -16,10 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
-
-
-
-
 @RestController
 @RequestMapping("/players") // Players == Users. Named users for they might have different roles (dev, admin or just player)
 @CrossOrigin("http://localhost:3000")
