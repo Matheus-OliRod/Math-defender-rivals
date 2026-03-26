@@ -14,7 +14,8 @@ export default function Question(difficulty) {
         answer: 0,
         id: crypto.randomUUID(),
         index: index,
-        secondsPassed: 0
+        secondsPassed: 0,
+        currentDifficulty: 0
     };
 
     // TEST
