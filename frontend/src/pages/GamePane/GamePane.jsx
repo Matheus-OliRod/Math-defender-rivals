@@ -12,23 +12,33 @@ export default function GamePane() {
 
     const spawnIntervalRef = useRef(null);
     const gameClock = useRef(null);
-
+    
     const [enemies, setEnemies] = useState([]); // Will contain question objects
-    const [lastEnemy, setLastEnemy] = useState(null);
     const [defeated, setDefeated] = useState([]); // All equations solved. Will be send to backend to verify and calculate actual score
     const [playerHealth, setPlayerHealth] = useState(3);
-
-    const [currentDifficulty, setCurrentDifficulty] = useState((currentUser.prevDifficulty - 2 < 0) ? 0 : currentUser.prevDifficulty - 2);
+    
+    const [currentDifficulty, setCurrentDifficulty] = useState(((currentUser.prevDifficulty - 2 < 1) ? 1 : currentUser.prevDifficulty - 2));
     const [currentScore, setCurrentScore] = useState(0);
     
     const [rivalBestScore] = useState(0);
     const [secondsPassed, setSecondsPassed] = useState(0); // Used to verify the speed from answers
     const [isGameOver, setIsGameOver] = useState(false);
-
+    
     const [givenAnswer, setGivenAnswer] = useState("");
+    
+    const secondsPassedRef = useRef(secondsPassed);
+    const currentDifficultyRef = useRef(currentDifficulty);
 
     // Game Loop
     // The question generation and appending cycle.
+
+    useEffect(() => {
+        secondsPassedRef.current = secondsPassed;
+    }, [secondsPassed]);
+
+    useEffect(() => {
+        currentDifficultyRef.current = currentDifficulty;
+    }, [currentDifficulty]);
 
     useEffect(() => {
 
@@ -59,18 +69,14 @@ export default function GamePane() {
 
     const updateCurrentUser = () => {
 
-        const updatedCurrentUser = {...currentUser,
-            prevDifficulty: currentDifficulty    
-        };
-
-        fetch(`${API}/players/updateUser/${currentUser.id}`, {
-            method: "PUT",
+        fetch(`${API}/questions/validateScore/${currentUser.id}`, {
+            method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(updatedCurrentUser)
+            body: JSON.stringify(defeated)
         })
         .then(res => res.json())
-        .then(setCurrentUser(updatedCurrentUser))
-        .catch(err => console.err("Couldn't update user"));
+        .then(user => setCurrentUser(user))
+        .catch(err => console.error("Couldn't update user: ", err));
     };
 
     /**
@@ -88,25 +94,16 @@ export default function GamePane() {
 
         let toAdd = 0; // The final value that will be awarded
 
-        // Scoring first answer
-        if(lastEnemy == null) {
-            toAdd = 1 * (1 + (secondsPassed/(enemy.secondsPassed + 1)));
-        }
-
-        else {
-            toAdd = currentDifficulty * (currentDifficulty + (secondsPassed/(enemy.secondsPassed - lastEnemy.secondsPassed + 1)));
-        }
-
-        if(toAdd > 3000) toAdd = 3000; // Hard capping scores
+        toAdd = enemy.baseValue * (1 + enemy.currentDifficulty / 10); 
+        
         setCurrentScore(prevScore => prevScore + parseInt(toAdd));
-        setLastEnemy(enemy);
     };
 
     /**
      * Creates a new question and appends to the enemies list
      */
     const createQuestion = () => {
-        const enemy = Question(currentDifficulty);
+        const enemy = Question(currentDifficultyRef.current, secondsPassedRef.current);
         return enemy;
     }
 
@@ -118,12 +115,15 @@ export default function GamePane() {
      */
     const updateStats = (enemy) => {
 
-        enemy.secondsPassed = secondsPassed;
+       const solvedEnemy = {...enemy, defeatedAt: setSecondsPassed}
 
-        setDefeated(pD => [...pD, enemy]);
+        setDefeated(pD => {
+            const updatedDefeated = [...pD, solvedEnemy];
+            setCurrentDifficulty(parseInt(updatedDefeated.length/2) + 1);
+            return updatedDefeated;
+        });
 
-        setCurrentDifficulty(parseInt(defeated.length/2) + 1);
-        sumToScore(enemy);
+        sumToScore(solvedEnemy);
         setGivenAnswer("");
     }
 
@@ -162,7 +162,7 @@ export default function GamePane() {
         
         setPlayerHealth(pH => {
 
-            if(playerHealth <= 1) triggerGameOver();
+            if(pH <= 1) triggerGameOver();
 
             return pH - 1;
         });
@@ -186,6 +186,7 @@ export default function GamePane() {
         <div className="game-pane">
             <div className="battleground">
                 <h2 className="health-title">HP = 3 - {3-playerHealth}</h2>
+                <h2>TEMPO: {secondsPassed}</h2>
 
                 {/* Where questions will spawn. If reaching the footer limit, the player loses HP */}
 

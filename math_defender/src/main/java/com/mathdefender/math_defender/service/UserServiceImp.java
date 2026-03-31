@@ -64,8 +64,11 @@ public class UserServiceImp implements UserService {
         user.setLastScore(updatedUser.getLastScore());
         user.setName(updatedUser.getName());
         user.setRivalEmail(updatedUser.getRivalEmail());
+        user.setprevDifficulty(updatedUser.getPrevDifficulty());
 
-        return userRepo.save(user); 
+        userRepo.save(user);
+
+        return user; 
     }
 
     @Override
