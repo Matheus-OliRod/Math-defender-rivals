@@ -1,6 +1,5 @@
-import { useState } from "react";
 
-export default function Question(difficulty) {
+export default function Question(difficulty, secondsPassed) {
 
     const index = Math.floor(Math.random()*10);
 
@@ -8,30 +7,30 @@ export default function Question(difficulty) {
     // Operation consist on the full operation String
     // answer is the expected input from the user
     // index ranges from 0 to 9, indicating the spawn position
-    const question_data = { 
+    let question_data = { 
         operation: "",
-        basevalue: 0,
+        baseValue: 0,
         answer: 0,
         id: crypto.randomUUID(),
         index: index,
-        secondsPassed: 0,
-        currentDifficulty: 0
+        defeatedAt: 0,
+        currentDifficulty: difficulty
     };
 
     // TEST
-    appendAddition(question_data, difficulty);
-    appendMultiplication(question_data, difficulty);
+    appendAddition(question_data);
+    appendMultiplication(question_data);
 
     return question_data;
 }
 
-function appendAddition(question_data, difficulty) {
+function appendAddition(question_data) {
 
-    const value = Math.ceil(Math.random()*(difficulty+1));
+    let value = Math.ceil(Math.random()*(question_data.currentDifficulty+1));
 
     if(!question_data.operation) {
         question_data.operation = value + "";
-        question_data = appendAddition(question_data, difficulty);
+        question_data = appendAddition(question_data);
         return;
     }
 
@@ -40,13 +39,13 @@ function appendAddition(question_data, difficulty) {
     question_data.answer = eval(question_data.operation);
 }
 
-function appendSubtraction(question_data, difficulty) {
+function appendSubtraction(question_data) {
 
-    const value = Math.ceil(Math.random()*(difficulty+1));
+    let value = Math.ceil(Math.random()*(question_data.currentDifficulty+1));
 
     if(!question_data.operation) {
         question_data.operation = value + "";
-        question_data = appendAddition(question_data, difficulty);
+        question_data = appendAddition(question_data);
         return;
     }
 
@@ -55,12 +54,13 @@ function appendSubtraction(question_data, difficulty) {
     question_data.answer = eval(question_data.operation);
 }
 
-function appendMultiplication(question_data, difficulty) {
-    const value = Math.ceil(Math.random()*0.5*(difficulty/2));
+function appendMultiplication(question_data) {
+
+    let value = Math.ceil(Math.random()*0.5*(question_data.currentDifficulty/2));
 
     if(!question_data.operation) {
         question_data.operation = value + "";
-        question_data = appendAddition(question_data, difficulty);
+        question_data = appendMultiplication(question_data);
         return;
     }
 

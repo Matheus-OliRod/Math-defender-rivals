@@ -25,14 +25,10 @@ export default function MainMenu() {
     const getRank = (email) => {
         for(let i = 0; i < users.length; i++) {
             
-            if(users[i].email == email) {
-                return i + 1;
-            }
-
-            // In case the user haven't set a rival
-            else {
-                return "SEM RIVAL";
-            }
+            if(users[i].email == email) return i + 1;
+            
+            else return "--"; 
+           
         }
     };
 
