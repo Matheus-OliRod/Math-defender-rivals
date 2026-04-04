@@ -1,15 +1,88 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import "./Leaderboard.css";
+import {API} from "../../contexts/Contexts";
 import BackToMenu from "@components/back-to-menu/BackToMenu";
 import { UserContext } from "../../contexts/UserContext";
 export default function Leaderboard() {
 
-    const { users } = useContext(UserContext);
+    const { currentUser, setCurrentUser, users } = useContext(UserContext);
+    
+    const [usersList, setUsersList] = useState(users.slice(3)); // Auxiliar list for displaying users
+    console.log(usersList);
+
+    const [inputValue, setInputValue] = useState("");
+
+    const updateRivalry = (user) => {
+
+        const updatedUser = {...currentUser, rivalEmail: null}
+
+        // Unseting rival
+        if(currentUser.rivalEmail === user.email) {
+            fetch(`${API}/players/updatePlayer/${currentUser.id}`,
+                {
+                    method: "PUT",
+                    body: JSON.stringify(updatedUser),
+                    headers: {"Content-Type": "application/json"}
+                }
+            )
+            .then(res => res.json())
+            .then(user => setCurrentUser(user))
+            .catch(err => console.log("Failed to update rival: ", err));
+        }
+
+        else {
+
+        }
+    };
+
+    function fuzzySearch(query, list, key = "name") {
+        query = query.toLowerCase();
+
+        return list
+            .map(item => {
+            const value = item[key];
+            if (!value) return null;
+
+            const lower = value.toLowerCase();
+
+            let score = 0;
+            let qi = 0;
+
+            for (let i = 0; i < lower.length && qi < query.length; i++) {
+                if (lower[i] === query[qi]) {
+                score += 2;
+                qi++;
+                } else {
+                score -= 0.5;
+                }
+            }
+
+            if (qi === query.length) score += 5;
+
+            return { item, score };
+            })
+            .filter(x => x && x.score > 0)
+            .sort((a, b) => b.score - a.score)
+            .map(x => x.item);
+    }   
+
+    const handleInputChange = (str) => {
+        setInputValue(str);
+        setUsersList(fuzzySearch(str, users.slice(3)));
+    };
 
     return (
         <div className="leaderboard">
 
             <BackToMenu />
+            
+            <fieldset>
+                <legend>Achar Jogador:</legend>
+                <input type="text" placeholder="NOME"
+                onChange={e => handleInputChange(e.target.value)}
+                value={inputValue}
+                />
+            </fieldset>
 
             <div className="rankers">
                 <h1>
@@ -38,8 +111,10 @@ export default function Leaderboard() {
                 </h3>
                 
                 
-                {users.slice(3).map(user => {
-                    <p>{user?.name.toUpperCase()} - {user?.bestScore}</p>
+                {usersList.map(user => {
+                    return <p className={(currentUser.rivalEmail == user.email) ? "rival" : ""}>
+                        {user?.name.toUpperCase()} - {user?.bestScore} <span className="set-rival" onClick={e => updateRivalry(user)}>RIVALIZAR</span>
+                    </p>
                 })}
 
             </div>

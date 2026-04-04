@@ -1,6 +1,7 @@
 package com.mathdefender.math_defender.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -72,8 +73,8 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public UserModel getUserByEmail(String email) {
-        UserModel user = userRepo.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found (Find by Email)"));
+    public Optional<UserModel> getUserByEmail(String email) {
+        Optional<UserModel> user = userRepo.findByEmail(email);
 
         return user;
     }
