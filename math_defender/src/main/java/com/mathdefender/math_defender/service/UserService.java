@@ -1,6 +1,7 @@
 package com.mathdefender.math_defender.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.mathdefender.math_defender.api.models.UserModel;
@@ -10,7 +11,7 @@ public interface UserService {
     public UserModel saveUser(UserModel user);
     public List<UserModel> getAllUsers();
     public UserModel updateUser(UserModel user, UUID id);
-    public UserModel getUserByEmail(String email);
+    public Optional<UserModel> getUserByEmail(String email);
     public UserModel getUserById(UUID id);
 } 
 

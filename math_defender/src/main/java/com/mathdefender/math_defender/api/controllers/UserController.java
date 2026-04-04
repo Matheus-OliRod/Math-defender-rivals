@@ -1,6 +1,7 @@
 package com.mathdefender.math_defender.api.controllers;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class UserController {
     }
     
     @GetMapping("/getUserByEmail/{email}")
-    public UserModel getUserByEmail(@PathVariable String email) {
+    public Optional<UserModel> getUserByEmail(@PathVariable String email) {
         return userService.getUserByEmail(email);
     }
 

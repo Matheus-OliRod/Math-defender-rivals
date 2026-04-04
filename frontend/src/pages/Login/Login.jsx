@@ -46,10 +46,8 @@ export default function Login() {
             return res.json();
         })
         .then(user => {
-            if(user.name != name) alert("Account already logged on another name.");
-            else if(!user) {
-                createUser();
-            }
+            if(!user) createUser();
+            else if(user.name != name) alert("Email já utilizado por outro nome.")
             else {
                 setCurrentUser(user);
                 navigate("main-menu");    

@@ -186,7 +186,6 @@ export default function GamePane() {
         <div className="game-pane">
             <div className="battleground">
                 <h2 className="health-title">HP = 3 - {3-playerHealth}</h2>
-                <h2>TEMPO: {secondsPassed}</h2>
 
                 {/* Where questions will spawn. If reaching the footer limit, the player loses HP */}
 

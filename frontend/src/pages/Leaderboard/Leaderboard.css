@@ -26,9 +26,15 @@
 }
 
 .leaderboard p {
-    color: gray;
+    color: white;
 }
 
 .trophy-icon {
     width: 2rem;
+}
+
+.set-rival {
+    cursor: pointer;
+    color: rebeccapurple;
+    font-weight: bolder;
 }
