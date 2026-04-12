@@ -8,17 +8,30 @@ export default function Leaderboard() {
     const { currentUser, setCurrentUser, users } = useContext(UserContext);
     
     const [usersList, setUsersList] = useState(users.slice(3)); // Auxiliar list for displaying users
-    console.log(usersList);
 
     const [inputValue, setInputValue] = useState("");
 
-    const updateRivalry = (user) => {
+    const updateRivalry = (rival_user) => {
 
-        const updatedUser = {...currentUser, rivalEmail: null}
+        const updatedUser = {...currentUser, rivalEmail: rival_user.email}
 
         // Unseting rival
-        if(currentUser.rivalEmail === user.email) {
-            fetch(`${API}/players/updatePlayer/${currentUser.id}`,
+        if(currentUser.rivalEmail === rival_user.email) {
+            fetch(`${API}/players/updateUser/${currentUser.id}`,
+                {
+                    method: "PUT",
+                    body: JSON.stringify({...updatedUser, rivalEmail: null}),
+                    headers: {"Content-Type": "application/json"}
+                }
+            )
+            .then(res => res.json())
+            .then(user => {
+                setCurrentUser(user)})
+            .catch(err => console.log("Failed to update rival (Unsetting): ", err));
+        }
+
+        else {
+            fetch(`${API}/players/updateUser/${currentUser.id}`,
                 {
                     method: "PUT",
                     body: JSON.stringify(updatedUser),
@@ -26,12 +39,9 @@ export default function Leaderboard() {
                 }
             )
             .then(res => res.json())
-            .then(user => setCurrentUser(user))
-            .catch(err => console.log("Failed to update rival: ", err));
-        }
-
-        else {
-
+            .then(user => {
+                setCurrentUser(user)})
+            .catch(err => console.log("Failed to update rival (Setting): ", err));
         }
     };
 
@@ -110,10 +120,13 @@ export default function Leaderboard() {
                     {users[2]?.name.toUpperCase()} - {users[2]?.bestScore}
                 </h3>
                 
-                
+                {/*Sorting all the other players. Giving the ability to rivalize and track the progress on the menu */}
                 {usersList.map(user => {
-                    return <p className={(currentUser.rivalEmail == user.email) ? "rival" : ""}>
+
+                    return <p key={user.id} className={(currentUser.rivalEmail == user.email) ? "rival" : ""}>
                         {user?.name.toUpperCase()} - {user?.bestScore} <span className="set-rival" onClick={e => updateRivalry(user)}>RIVALIZAR</span>
+                        <br />
+                        <span>{user.id.slice(-8)}</span>
                     </p>
                 })}
 
