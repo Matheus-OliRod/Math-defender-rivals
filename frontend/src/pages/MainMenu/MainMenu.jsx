@@ -22,14 +22,19 @@ export default function MainMenu() {
         
     }, []);
 
+    /**
+     * Searches for the rank of a specific player through its email.
+     * 
+     * Returns the rank of the player or '--' if the player was not found
+     * @param {String} email 
+     * @returns {number, String}
+     */
     const getRank = (email) => {
+
         for(let i = 0; i < users.length; i++) {
-            
-            if(users[i].email == email) return i + 1;
-            
-            else return "--"; 
-           
+            if(users[i].email == email) return i + 1; 
         }
+        return '--';
     };
 
     const [playerBestScore] = useState(currentUser.bestScore);
