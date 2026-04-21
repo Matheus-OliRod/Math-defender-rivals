@@ -19,7 +19,7 @@ export default function MainMenu() {
             setUsers(data);
         })
         .catch(err => console.error("Failed to load players. \nErr: ", err));
-        
+
     }, []);
 
     /**

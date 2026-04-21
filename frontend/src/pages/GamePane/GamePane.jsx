@@ -6,172 +6,180 @@ import Question from "../../logic/game-loop/Question";
 import { UserContext } from "../../contexts/UserContext";
 import { API } from "../../contexts/Contexts";
 
+import HOME_ICON from "@res/images/icons/home-1-svgrepo-com.svg";
+import LEADERBOARD_ICON from "@res/images/icons/leaderboard-star-svgrepo-com.svg";
+import REFRESH_ICON from "@res/images/icons/war-swords-cross-svgrepo-com.svg";
+
 export default function GamePane() {
 
-    const { currentUser, setCurrentUser } = useContext(UserContext);
+    const { currentUser, setCurrentUser, users } = useContext(UserContext);
 
-    const spawnIntervalRef = useRef(null);
-    const gameClock = useRef(null);
-    
-    const [enemies, setEnemies] = useState([]); // Will contain question objects
-    const [defeated, setDefeated] = useState([]); // All equations solved. Will be send to backend to verify and calculate actual score
-    const [playerHealth, setPlayerHealth] = useState(3);
-    
-    const [currentDifficulty, setCurrentDifficulty] = useState(((currentUser.prevDifficulty - 2 < 1) ? 1 : currentUser.prevDifficulty - 2));
-    const [currentScore, setCurrentScore] = useState(0);
-    
-    const [rivalBestScore] = useState(0);
-    const [secondsPassed, setSecondsPassed] = useState(0); // Used to verify the speed from answers
-    const [isGameOver, setIsGameOver] = useState(false);
-    
+    const getScore = (email) => {
+        if(!email) return "--";
+
+        for(const user of users) {
+            if(user.email === email) return user.bestScore;
+        }
+
+        return "--"; // In case the email was not found
+    }
+    const [rivalBestScore] = useState(getScore(currentUser.rivalEmail));
+
+    const createInitialState = () => ({
+        enemies: [], // Will contain question objects
+        defeated: [], // All equations solved. Will be send to backend to verify and calculate actual score
+        playerHealth: 3,
+        currentScore: 0,
+        currentDifficulty: ((currentUser.prevDifficulty - 2 < 1) ? 1 : currentUser.prevDifficulty - 2),
+        secondsPassed: 0,
+        lastQuestionTime: 0,
+        isGameOver: false
+
+    })
+  
+    const [gameState, setGameState] = useState(createInitialState);
     const [givenAnswer, setGivenAnswer] = useState("");
     
-    const secondsPassedRef = useRef(secondsPassed);
-    const currentDifficultyRef = useRef(currentDifficulty);
+    const gameStateRef = useRef(gameState);
 
     // Game Loop
     // The question generation and appending cycle.
 
     useEffect(() => {
-        secondsPassedRef.current = secondsPassed;
-    }, [secondsPassed]);
+        gameStateRef.current = gameState;
+    }, [gameState]);
 
     useEffect(() => {
-        currentDifficultyRef.current = currentDifficulty;
-    }, [currentDifficulty]);
+        if(gameState.playerHealth === 0 && !gameState.isGameOver) triggerGameOver();
+    }, [gameState.playerHealth]);
 
     useEffect(() => {
 
-        if(isGameOver) return;
+        if(gameState.isGameOver) return;
 
-        spawnIntervalRef.current = setInterval(() => {
-            setEnemies(pE => {
-                if(pE.length >= 10) {
-                    return pE;
+        const spawnInterval = setInterval(() => {
+            setGameState(pGS => {
+                if(pGS.enemies.length > 5) return pGS;
+
+                return {
+                    ...pGS,
+                    enemies: [...pGS.enemies, createQuestion(pGS)]
                 }
-
-                return [...pE, createQuestion()];
             })
         }, 2000);
 
         // Counts seconds in game
-        gameClock.current = setInterval(() => {
-            setSecondsPassed(pS => pS + 1);
+        const gameClock = setInterval(() => {
+            setGameState(pGS => {
+                console.log("Time: ", pGS.secondsPassed,
+                    "\nCurrent gameState: ", pGS
+                );
+                return {
+                    ...pGS,
+                    secondsPassed: pGS.secondsPassed + 1
+                }
+            });
         }, 1000);
 
         return () => {
-           clearInterval(spawnIntervalRef.current);
-           clearInterval(gameClock.current);
-           spawnIntervalRef.current = null;
+           clearInterval(spawnInterval);
+           clearInterval(gameClock);
         }
 
-    }, [isGameOver]);
+    }, [gameState.isGameOver]);
 
     const updateCurrentUser = () => {
 
         fetch(`${API}/questions/validateScore/${currentUser.id}`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(defeated)
+            body: JSON.stringify(gameStateRef.current.defeated)
         })
         .then(res => res.json())
         .then(user => setCurrentUser(user))
         .catch(err => console.error("Couldn't update user: ", err));
     };
 
-    /**
-     * Will sum the value of the last solved question based on difficulty and time elapsed.
-     * 
-     * The time elapsed will consider the last and the seconds last question solved, to calculate the time spent to solve it.
-     * 
-     * The first item will reduce 0, since it was the first question.
-     * 
-     * The equation goes as follows: currentDifficulty * (defeated.length + secondsPassed/(lastEnemy.passedTime - secondLastEnemy.passedTime + 1))
-     * 
-     * NOTICE: This is only a preview of the score, all questions will be sent to the backend to do the calculation again. This being to verify the integrity and veracity of the score. This functions serves as a preview. The real score that will be stored is processed on the backend.
-     */
-    const sumToScore = (enemy) => {
-
-        let toAdd = 0; // The final value that will be awarded
-
-        toAdd = enemy.baseValue * (1 + enemy.currentDifficulty / 10); 
-        
-        setCurrentScore(prevScore => prevScore + parseInt(toAdd));
-    };
-
+    
     /**
      * Creates a new question and appends to the enemies list
      */
-    const createQuestion = () => {
-        const enemy = Question(currentDifficultyRef.current, secondsPassedRef.current);
+    const createQuestion = (pGS) => {
+        const enemy = Question(pGS.currentDifficulty);
         return enemy;
     }
 
-    /**
-     * 
-     * Updates in game stats, like current difficulty, score...
-     * 
-     * @param {Object} enemy 
-     */
-    const updateStats = (enemy) => {
-
-       const solvedEnemy = {...enemy, defeatedAt: setSecondsPassed}
-
-        setDefeated(pD => {
-            const updatedDefeated = [...pD, solvedEnemy];
-            setCurrentDifficulty(parseInt(updatedDefeated.length/2) + 1);
-            return updatedDefeated;
-        });
-
-        sumToScore(solvedEnemy);
-        setGivenAnswer("");
-    }
-
+    
     /**
      * Verifies the answer and updates the enemies list if answer correlates with a question
      */
     const verifyAnswer = () => {
 
-        // Verifying if the answer answers anything
-        for(const enemy of enemies) {
-            if(enemy.answer == givenAnswer) {
+        setGameState(pGS => {
 
-                setEnemies(pE => (
-                pE.filter(e => e.id != enemy.id)
-                ));
-        
-                // Updating stats
-                updateStats(enemy);
+            let enemyHit = null;
 
-                break;
+            for (const enemy of pGS.enemies) {
+                if (enemy.answer == givenAnswer) {
+                    enemyHit = enemy;
+                    break;
+                }
             }
-        }
+
+            if (!enemyHit) return pGS;
+
+            const enemies = pGS.enemies.filter(e => e.id !== enemyHit.id);
+
+            const solvedEnemy = {
+                ...enemyHit,
+                defeatedAt: pGS.secondsPassed
+            };
+
+            const defeated = [...pGS.defeated, solvedEnemy];
+
+            // Calculating score
+
+            const toAdd = (enemyHit.baseValue * enemyHit.currentDifficulty * (1/(enemyHit.defeatedAt - gameState.lastQuestionTime + 1)));
+
+            const currentScore = pGS.currentScore + toAdd;
+
+            return {
+                ...pGS,
+                enemies,
+                defeated,
+                currentDifficulty: Math.floor(defeated.length / 2) + 1,
+                currentScore,
+                lastQuestionTime: enemyHit.defeatedAt
+            };
+        });
 
         setGivenAnswer("");
     }
 
     const triggerGameOver = () => {
 
-        if(currentUser.bestScore < currentScore) updateCurrentUser();
+        updateCurrentUser(); // Always updates due to prevDifficulty
 
-        setIsGameOver(true);
-        setEnemies([]);
+        setGameState(pGS => {
+            return {
+                ...pGS,
+                enemies: [],
+                isGameOver: true
+            }
+        });
     }
 
     const hurtPlayer = (enemy) => {
         
-        setPlayerHealth(pH => {
+        setGameState(pGS => {
 
-            if(pH <= 1) triggerGameOver();
-
-            return pH - 1;
+            const updatedHealth = pGS.playerHealth - 1;
+            return {
+                ...pGS,
+                playerHealth: updatedHealth,
+                enemies: pGS.enemies.filter(e => e.id != enemy.id) // Removing the question
+            };
         });
-
-        // Removing the question
-
-        setEnemies(pE => 
-            (pE.filter(e => e.id !== enemy.id))
-        );
     }
 
     /**
@@ -185,11 +193,11 @@ export default function GamePane() {
     return (
         <div className="game-pane">
             <div className="battleground">
-                <h2 className="health-title">HP = 3 - {3-playerHealth}</h2>
+                <h2 className="health-title">HP = 3 - {3-gameState.playerHealth}</h2>
 
                 {/* Where questions will spawn. If reaching the footer limit, the player loses HP */}
 
-                {enemies.map((enemy) => (
+                {gameState.enemies.map((enemy) => (
                     <QuestionComponent question={enemy}
                     index={enemy.index}
                     key={enemy.id}
@@ -197,15 +205,11 @@ export default function GamePane() {
                 ))}
 
                 {/** Game Over panel */}
-                <div style={{display: (isGameOver ? "flex" : "none")}} className="game-over">
-                    <h1>DERROTA</h1>
-                    <h2 className="score-meter">Pontuação: {currentScore}</h2>
-                    <Link to="/main-menu"><button>VOLTAR AO INÍCIO</button></Link>
-                </div>
+                <GameOverPanel style={{display: gameState.isGameOver ? "flex" : "none"}} currentScore={gameState.currentScore} />
 
                 <div className="scores-holder">
-                    <h2  className="difficulty-meter">Dificuldade: {currentDifficulty}</h2>
-                    <h2 className="score-meter">Pontuação: {currentScore}</h2>
+                    <h2  className="difficulty-meter">Dificuldade: {gameState.currentDifficulty}</h2>
+                    <h2 className="score-meter">Pontuação: {gameState.currentScore}</h2>
                     <h2 className="rival-best-score">Rival: {rivalBestScore}</h2>
                 </div>
             </div> 
@@ -218,5 +222,22 @@ export default function GamePane() {
                     </svg>
             </footer>
         </div>
+    )
+}
+
+function GameOverPanel({ currentScore, style }) {
+
+    return (
+        <div className="game-over" style={style}>
+            <h1>DERROTA</h1>
+            <h2 className="score-meter">Pontuação: {currentScore}</h2>
+            <span style={{display: "flex", gap: "2rem", alignItems: "center"}}>
+                <Link to="/main-menu"><button><img src={HOME_ICON} alt="INÍCIO" /></button></Link>
+                <button><img src={REFRESH_ICON} alt="Nova Batalha" /></button>
+                <Link to="/leaderboard"><button><img src={LEADERBOARD_ICON} alt="Placar" /></button></Link>
+            </span>
+            
+        </div>
+
     )
 }
